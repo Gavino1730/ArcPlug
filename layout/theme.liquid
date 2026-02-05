@@ -62,17 +62,12 @@
     <link rel="dns-prefetch" href="https://fonts.shopifycdn.com">
     <link rel="dns-prefetch" href="https://monorail-edge.shopifysvc.com">
 
-    {%- comment -%} Preload critical scripts {%- endcomment -%}
-    <link rel="modulepreload" href="{{ 'constants.js' | asset_url }}" as="script">
-    <link rel="modulepreload" href="{{ 'pubsub.js' | asset_url }}" as="script">
-    <link rel="modulepreload" href="{{ 'global.js' | asset_url }}" as="script">
+    {%- comment -%} Critical scripts with proper preload {%- endcomment -%}
+    <link rel="preload" href="{{ 'constants.js' | asset_url }}" as="script">
+    <link rel="preload" href="{{ 'global.js' | asset_url }}" as="script">
     
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
 
     {%- if settings.animations_reveal_on_scroll -%}
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
@@ -413,101 +408,24 @@
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
-  <script src="{{ 'tiny-img-link-preloader.js' | asset_url }}" defer></script>
-  
-  {%- comment -%} Enhanced features - loaded with error handling {%- endcomment -%}
+  {%- comment -%} Load only essential features asynchronously after critical content {%- endcomment -%}
   <script>
-    // Safely load enhancement modules
-    (function() {
-      const loadScript = (src) => {
-        const script = document.createElement('script');
-        script.src = src;
-        script.defer = true;
-        script.onerror = () => console.wa- wrapped in try/catch {%- endcomment -%}
-  <script>
-    try {cument.body.appendChild(script);
-      };
-      
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-          loadScript("{{ 'enhanced-accessibility.js' | asset_url }}");
-          loadScript("{{ 'performance-optimizer.js' | asset_url }}");
-          loadScript("{{ 'seo-enhancer.js' | asset_url }}");
-          loadScript("{{ 'ux-enhancer.js' | asset_url }}");
-          loadScript("{{ 'conversion-optimizer.js' | asset_url }}");
-          loadScript("{{ 'sales-maximizer.js' | asset_url }}");
-          loadScript("{{ 'sticky-cart.js' | asset_url }}");
-          loadScript("{{ 'product-media-enhancer.js' | asset_url }}");
-          loadScript("{{ 'checkout-accelerator.js' | asset_url }}");
-        });
-      } else {
-        loadScript("{{ 'enhanced-accessibility.js' | asset_url }}");
-        loadScript("{{ 'performance-optimizer.js' | asset_url }}");
-        loadScript("{{ 'seo-enhancer.js' | asset_url }}");
-        loadScript("{{ 'ux-enhancer.js' | asset_url }}");
-        loadScript("{{ 'conversion-optimizer.js' | asset_url }}");
-        loadScript("{{ 'sales-maximizer.js' | asset_url }}");
-        loadScript("{{ 'sticky-cart.js' | asset_url }}");
-        loadScript("{{ 'product-media-enhancer.js' | asset_url }}");
-        loadScript("{{ 'checkout-accelerator.js' | asset_url }}");
-      }
-    })();
-  </script>
-  
-  {%- comment -%} Performance monitoring {%- endcomment -%}
-  <script>
-    // Monitor Core Web Vitals
-    if ('PerformanceObserver' in window) {
-      // Largest Contentful Paint (LCP)
-      const lcpObserver = new PerformanceObserver((list) => {
-        const entries = list.getEntries();
-        const lastEntry = entries[entries.length - 1];
-        console.log('LCP:', lastEntry.renderTime || lastEntry.loadTime);
-      });
-      try { lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true }); } catch(e) {}
-      
-      // First Input Delay (FID)
-      const fidObserver = new PerformanceObserver((list) => {
-        list.getEntries().forEach((entry) => {
-          console.log('FID:', entry.processingStart - entry.startTime);
-        });
-      });
-      try { fidObserver.observe({ type: 'first-input', buffered: true }); } catch(e) {}
-      
-      // Cumulative Layout Shift (CLS)
-      let clsScore = 0;
-      const clsObserver = new PerformanceObserver((list) => {
-        list.getEntries().forEach((entry) => {
-          if (!entry.hadRecentInput) {
-            clsScore += entry.value;
-          }
-    } catch(e) {
-      console.warn('Performance monitoring error:', e);
-    }
-        });
-      });
-      try { clsObserver.observe({ type: 'layout-shift', buffered: true }); } catch(e) {}
-      
-      // Log CLS on page unload
-      window.addEventListener('beforeunload', () => {
-        console.log('CLS:', clsScore);
-      });
-    }
-    
-    // Page load performance
     window.addEventListener('load', () => {
-      if (window.performance && window.performance.timing) {
-        const perfData = window.performance.timing;
-        const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
-        const connectTime = perfData.responseEnd - perfData.requestStart;
-        const renderTime = perfData.domComplete - perfData.domLoading;
-        console.log('Page Load Performance:', {
-          total: pageLoadTime + 'ms',
-          connect: connectTime + 'ms',
-          render: renderTime + 'ms'
+      setTimeout(() => {
+        const scripts = [
+          "{{ 'performance-optimizer.js' | asset_url }}",
+          "{{ 'conversion-optimizer.js' | asset_url }}"
+        ];
+        scripts.forEach(src => {
+          const script = document.createElement('script');
+          script.src = src;
+          script.async = true;
+          document.body.appendChild(script);
         });
-      }
+      }, 1000);
     });
   </script>
+  
+
 </body>
 </html>
