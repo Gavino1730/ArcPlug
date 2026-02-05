@@ -1,0 +1,88 @@
+{%- style -%}
+  .sticky-mobile-cta {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to bottom, rgba(var(--color-background), 0.95), rgba(var(--color-background), 1));
+    padding: 12px 16px;
+    border-top: 1px solid rgba(var(--color-foreground), 0.1);
+    backdrop-filter: blur(10px);
+    z-index: 99;
+    animation: slideUpMobile 0.3s ease;
+  }
+
+  .sticky-mobile-cta .button {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  @media screen and (max-width: 749px) {
+    .sticky-mobile-cta {
+      padding: 10px 12px;
+    }
+
+    .sticky-mobile-cta .button {
+      padding: 12px 16px;
+      font-size: 0.9rem;
+    }
+  }
+
+  @keyframes slideUpMobile {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .sticky-mobile-cta {
+      display: none !important;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .sticky-mobile-cta {
+      display: block;
+    }
+
+    html {
+      scroll-padding-bottom: 65px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="sticky-mobile-cta">
+  <a href="{{ section.settings.button_link }}" class="button button--primary">
+    {{ section.settings.button_text }}
+  </a>
+</div>
+
+{% schema %}
+{
+  "name": "Sticky Mobile CTA",
+  "settings": [
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Shop Jackets"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link",
+      "default": "/collections/all"
+    }
+  ]
+}
+{% endschema %}

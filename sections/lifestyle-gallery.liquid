@@ -1,0 +1,261 @@
+<style>
+  .lifestyle-gallery {
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px 0;
+  }
+
+  .lifestyle-gallery__header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 0 2rem;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.15);
+    padding-bottom: 20px;
+  }
+
+  .lifestyle-gallery__title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+    color: rgba(var(--color-foreground), 0.9);
+  }
+
+  .lifestyle-gallery__images {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    width: 100%;
+    padding: 0 2rem;
+    margin: 0;
+  }
+
+  .lifestyle-gallery__image {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 350px;
+    border-radius: 6px;
+  }
+
+  .lifestyle-gallery__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .lifestyle-gallery__image:hover img {
+    transform: scale(1.03);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .lifestyle-gallery__button {
+    display: block;
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  .lifestyle-gallery__button .button {
+    display: inline-block;
+  }
+
+  @media screen and (max-width: 749px) {
+    .lifestyle-gallery {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+    .lifestyle-gallery__header {
+      margin-bottom: 1rem;
+      padding: 0 1rem;
+    }
+
+    .lifestyle-gallery__images {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .lifestyle-gallery__image {
+      height: 200px;
+    }
+
+    .lifestyle-gallery__title {
+      font-size: 1.25rem;
+      margin-bottom: 0;
+      padding-bottom: 10px;
+    }
+
+    .lifestyle-gallery__button {
+      margin-top: 1rem;
+    }
+  }
+</style>
+
+<div class="lifestyle-gallery color-{{ section.settings.color_scheme }} gradient">
+  {% if section.settings.show_title %}
+    <div class="lifestyle-gallery__header">
+      <h2 class="lifestyle-gallery__title">{{ section.settings.title }}</h2>
+    </div>
+  {% endif %}
+
+  <div class="lifestyle-gallery__images">
+    {% for block in section.blocks %}
+      {% if block.settings.image != blank %}
+        <div class="lifestyle-gallery__image" {{ block.shopify_attributes }}>
+          {{ block.settings.image | image_url: width: 800 | image_tag: alt: block.settings.image.alt, loading: 'lazy' }}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  {% if section.settings.show_gallery_button %}
+    <div class="lifestyle-gallery__button">
+      <a href="{{ section.settings.gallery_button_link }}" class="button button--secondary">
+        {{ section.settings.gallery_button_text }}
+      </a>
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Lifestyle Image Gallery",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Show Title",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "On the Mountain"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns",
+      "options": [
+        {
+          "value": "2",
+          "label": "2 Columns"
+        },
+        {
+          "value": "3",
+          "label": "3 Columns"
+        },
+        {
+          "value": "4",
+          "label": "4 Columns"
+        }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 0,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "label": "Gap Between Images",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "min": 200,
+      "max": 600,
+      "step": 25,
+      "unit": "px",
+      "label": "Image Height",
+      "default": 375
+    },
+    {
+      "type": "checkbox",
+      "id": "show_gallery_button",
+      "label": "Show Gallery Button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "gallery_button_text",
+      "label": "Gallery Button Text",
+      "default": "See Full Gallery"
+    },
+    {
+      "type": "text",
+      "id": "gallery_button_link",
+      "label": "Gallery Button Link",
+      "default": "/pages/gallery"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lifestyle Image Gallery",
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

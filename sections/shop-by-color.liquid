@@ -1,0 +1,214 @@
+<style>
+  .shop-by-color {
+    padding: {{ section.settings.padding_top }}px 2rem {{ section.settings.padding_bottom }}px 2rem;
+  }
+
+  .shop-by-color__title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0 0 2rem 0;
+    color: rgba(var(--color-foreground), 0.9);
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.2);
+  }
+
+  .shop-by-color__wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    justify-items: center;
+  }
+
+  .color-swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .color-swatch:hover {
+    transform: scale(1.1);
+  }
+
+  .color-swatch__circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid rgba(var(--color-foreground), 0.2);
+    transition: border-color 0.2s ease;
+  }
+
+  .color-swatch:hover .color-swatch__circle {
+    border-color: rgba(var(--color-foreground), 0.5);
+  }
+
+  .color-swatch__name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(var(--color-foreground), 0.8);
+    margin: 0;
+    text-align: center;
+  }
+
+  @media screen and (max-width: 749px) {
+    .shop-by-color__wrapper {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .color-swatch__circle {
+      width: 60px;
+      height: 60px;
+    }
+
+    .shop-by-color__title {
+      font-size: 1.5rem;
+    }
+  }
+</style>
+
+<div class="shop-by-color color-{{ section.settings.color_scheme }} gradient">
+  <div>
+    {% if section.settings.title != blank %}
+      <h2 class="shop-by-color__title">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    <div class="shop-by-color__wrapper">
+      {% for block in section.blocks %}
+        <a href="{{ routes.collections_url }}/{{ block.settings.collection }}" class="color-swatch" {{ block.shopify_attributes }}>
+          <div class="color-swatch__circle" style="background-color: {{ block.settings.color_hex }};"></div>
+          <p class="color-swatch__name">{{ block.settings.color_name }}</p>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Shop by Color",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Shop by Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "color",
+      "name": "Color Swatch",
+      "limit": 12,
+      "settings": [
+        {
+          "type": "text",
+          "id": "color_name",
+          "label": "Color Name",
+          "default": "Color"
+        },
+        {
+          "type": "color",
+          "id": "color_hex",
+          "label": "Color",
+          "default": "#000000"
+        },
+        {
+          "type": "text",
+          "id": "collection",
+          "label": "Collection Handle",
+          "default": "all"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop by Color",
+      "blocks": [
+        {
+          "type": "color",
+          "settings": {
+            "color_name": "Black",
+            "color_hex": "#000000",
+            "collection": "all"
+          }
+        },
+        {
+          "type": "color",
+          "settings": {
+            "color_name": "Pink",
+            "color_hex": "#FF69B4",
+            "collection": "all"
+          }
+        },
+        {
+          "type": "color",
+          "settings": {
+            "color_name": "Blue",
+            "color_hex": "#0066FF",
+            "collection": "all"
+          }
+        },
+        {
+          "type": "color",
+          "settings": {
+            "color_name": "Purple",
+            "color_hex": "#7D3FFF",
+            "collection": "all"
+          }
+        },
+        {
+          "type": "color",
+          "settings": {
+            "color_name": "Red",
+            "color_hex": "#FF0000",
+            "collection": "all"
+          }
+        },
+        {
+          "type": "color",
+          "settings": {
+            "color_name": "Yellow",
+            "color_hex": "#FFD700",
+            "collection": "all"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

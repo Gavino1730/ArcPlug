@@ -1,0 +1,25 @@
+{
+  "sections": {
+    "gallery": {
+      "type": "photo-gallery",
+      "settings": {
+        "title": "Gallery",
+        "subtitle": "Shots from Mt. Hood nights to city streets.",
+        "color_scheme": "scheme-1",
+        "columns_desktop": 4,
+        "columns_mobile": 2,
+        "gap": 12,
+        "padding_top": 32,
+        "padding_bottom": 32
+      },
+      "blocks": {
+        "img1": { "type": "image", "settings": { "image": "", "alt": "", "caption": "", "link": "", "open_in_new": false } },
+        "img2": { "type": "image", "settings": { "image": "", "alt": "", "caption": "", "link": "", "open_in_new": false } },
+        "img3": { "type": "image", "settings": { "image": "", "alt": "", "caption": "", "link": "", "open_in_new": false } },
+        "img4": { "type": "image", "settings": { "image": "", "alt": "", "caption": "", "link": "", "open_in_new": false } }
+      },
+      "block_order": ["img1", "img2", "img3", "img4"]
+    }
+  },
+  "order": ["gallery"]
+}

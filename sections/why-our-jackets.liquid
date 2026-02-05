@@ -1,0 +1,185 @@
+<style>
+  .why-our-jackets {
+    padding: {{ section.settings.padding_top }}px 2rem {{ section.settings.padding_bottom }}px 2rem;
+  }
+
+  .why-our-jackets__title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0 0 3rem 0;
+    color: rgba(var(--color-foreground), 0.9);
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.2);
+  }
+
+  .why-our-jackets__wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .feature-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .feature-item__icon {
+    width: 3rem;
+    height: 3rem;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .feature-item__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: rgba(var(--color-foreground), 0.9);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .feature-item__description {
+    font-size: 0.95rem;
+    color: rgba(var(--color-foreground), 0.7);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  @media screen and (max-width: 749px) {
+    .why-our-jackets__wrapper {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .why-our-jackets__title {
+      font-size: 1.5rem;
+    }
+  }
+</style>
+
+<div class="why-our-jackets color-{{ section.settings.color_scheme }} gradient">
+  <div>
+    {% if section.settings.title != blank %}
+      <h2 class="why-our-jackets__title">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    <div class="why-our-jackets__wrapper">
+      {% for block in section.blocks %}
+        <div class="feature-item" {{ block.shopify_attributes }}>
+          <div class="feature-item__icon">
+            {% case forloop.index %}
+              {% when 1 %}
+                💧
+              {% when 2 %}
+                🔗
+              {% when 3 %}
+                ⛰️
+              {% else %}
+                ✓
+            {% endcase %}
+          </div>
+          <h3 class="feature-item__title">{{ block.settings.title }}</h3>
+          <p class="feature-item__description">{{ block.settings.description }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Why Our Jackets",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Why Our Jackets"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Describe this feature in one sentence."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Why Our Jackets",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Weatherproof Fabric",
+            "description": "Advanced materials keep you dry in any condition."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Fully Taped Seams",
+            "description": "Complete waterproof protection from every angle."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Field Tested",
+            "description": "Proven performance on the mountain."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
