@@ -296,7 +296,7 @@
     {% endstyle %}
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
-    {{ 'enhanced-components.css' | asset_url | stylesheet_tag }}
+    <link rel="stylesheet" href="{{ 'enhanced-components.css' | asset_url }}" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
     {%- if settings.cart_type == 'drawer' -%}
@@ -415,12 +415,44 @@
     {%- endif -%}
   <script src="{{ 'tiny-img-link-preloader.js' | asset_url }}" defer></script>
   
-  {%- comment -%} Enhanced features {%- endcomment -%}
-  <script src="{{ 'enhanced-accessibility.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'performance-optimizer.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'seo-enhancer.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'ux-enhancer.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'conversion-optimizer.js' | asset_url }}" defer="defer"></script>
+  {%- comment -%} Enhanced features - loaded with error handling {%- endcomment -%}
+  <script>
+    // Safely load enhancement modules
+    (function() {
+      const loadScript = (src) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.defer = true;
+        script.onerror = () => console.wa- wrapped in try/catch {%- endcomment -%}
+  <script>
+    try {cument.body.appendChild(script);
+      };
+      
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          loadScript("{{ 'enhanced-accessibility.js' | asset_url }}");
+          loadScript("{{ 'performance-optimizer.js' | asset_url }}");
+          loadScript("{{ 'seo-enhancer.js' | asset_url }}");
+          loadScript("{{ 'ux-enhancer.js' | asset_url }}");
+          loadScript("{{ 'conversion-optimizer.js' | asset_url }}");
+          loadScript("{{ 'sales-maximizer.js' | asset_url }}");
+          loadScript("{{ 'sticky-cart.js' | asset_url }}");
+          loadScript("{{ 'product-media-enhancer.js' | asset_url }}");
+          loadScript("{{ 'checkout-accelerator.js' | asset_url }}");
+        });
+      } else {
+        loadScript("{{ 'enhanced-accessibility.js' | asset_url }}");
+        loadScript("{{ 'performance-optimizer.js' | asset_url }}");
+        loadScript("{{ 'seo-enhancer.js' | asset_url }}");
+        loadScript("{{ 'ux-enhancer.js' | asset_url }}");
+        loadScript("{{ 'conversion-optimizer.js' | asset_url }}");
+        loadScript("{{ 'sales-maximizer.js' | asset_url }}");
+        loadScript("{{ 'sticky-cart.js' | asset_url }}");
+        loadScript("{{ 'product-media-enhancer.js' | asset_url }}");
+        loadScript("{{ 'checkout-accelerator.js' | asset_url }}");
+      }
+    })();
+  </script>
   
   {%- comment -%} Performance monitoring {%- endcomment -%}
   <script>
@@ -449,6 +481,9 @@
           if (!entry.hadRecentInput) {
             clsScore += entry.value;
           }
+    } catch(e) {
+      console.warn('Performance monitoring error:', e);
+    }
         });
       });
       try { clsObserver.observe({ type: 'layout-shift', buffered: true }); } catch(e) {}
