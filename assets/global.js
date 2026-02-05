@@ -6,6 +6,58 @@ function getFocusableElements(container) {
   );
 }
 
+// Enhanced error handling utility
+class ErrorHandler {
+  static log(error, context = '') {
+    console.error(`[${context}] Error:`, error);
+    // Could integrate with analytics here
+    if (window.Shopify && window.Shopify.designMode) {
+      console.trace();
+    }
+  }
+
+  static handle(fn, context = 'Unknown') {
+    return function(...args) {
+      try {
+        return fn.apply(this, args);
+      } catch (error) {
+        ErrorHandler.log(error, context);
+      }
+    };
+  }
+
+  static async handleAsync(fn, context = 'Unknown') {
+    try {
+      return await fn();
+    } catch (error) {
+      ErrorHandler.log(error, context);
+    }
+  }
+}
+
+// Performance utilities
+class PerformanceHelper {
+  static mark(name) {
+    if ('performance' in window && 'mark' in window.performance) {
+      window.performance.mark(name);
+    }
+  }
+
+  static measure(name, startMark, endMark) {
+    if ('performance' in window && 'measure' in window.performance) {
+      try {
+        window.performance.measure(name, startMark, endMark);
+        const measure = window.performance.getEntriesByName(name)[0];
+        if (measure && window.Shopify?.designMode) {
+          console.log(`Performance: ${name} took ${measure.duration.toFixed(2)}ms`);
+        }
+      } catch (e) {
+        // Marks don't exist, ignore
+      }
+    }
+  }
+}
+
 class SectionId {
   static #separator = '__';
 
@@ -105,6 +157,7 @@ function trapFocus(container, elementToFocus = container) {
 
   trapFocusHandlers.keydown = function (event) {
     if (event.code.toUpperCase() !== 'TAB') return; // If not TAB key
+    
     // On the last focusable element and tab forward, focus the first element.
     if (event.target === last && !event.shiftKey) {
       event.preventDefault();
@@ -121,14 +174,16 @@ function trapFocus(container, elementToFocus = container) {
   document.addEventListener('focusout', trapFocusHandlers.focusout);
   document.addEventListener('focusin', trapFocusHandlers.focusin);
 
-  elementToFocus.focus();
+  if (elementToFocus) {
+    elementToFocus.focus();
 
-  if (
-    elementToFocus.tagName === 'INPUT' &&
-    ['search', 'text', 'email', 'url'].includes(elementToFocus.type) &&
-    elementToFocus.value
-  ) {
-    elementToFocus.setSelectionRange(0, elementToFocus.value.length);
+    if (
+      elementToFocus.tagName === 'INPUT' &&
+      ['search', 'text', 'email', 'url'].includes(elementToFocus.type) &&
+      elementToFocus.value
+    ) {
+      elementToFocus.setSelectionRange(0, elementToFocus.value.length);
+    }
   }
 }
 
@@ -298,6 +353,39 @@ function throttle(fn, delay) {
     lastCall = now;
     return fn(...args);
   };
+}
+
+// Memoization helper for expensive operations
+function memoize(fn) {
+  const cache = new Map();
+  return function(...args) {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    const result = fn.apply(this, args);
+    cache.set(key, result);
+    return result;
+  };
+}
+
+// Lazy loading utility
+function lazyLoad(selector, callback) {
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          callback(entry.target);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '50px' });
+
+    document.querySelectorAll(selector).forEach(el => observer.observe(el));
+  } else {
+    // Fallback for older browsers
+    document.querySelectorAll(selector).forEach(callback);
+  }
 }
 
 function fetchConfig(type = 'json') {
