@@ -50,7 +50,7 @@
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+      background: rgb(var(--color-button));
       transform: scaleX(0);
       transform-origin: left;
       transition: transform 0.3s ease;
@@ -58,7 +58,7 @@
     
     .benefit-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 25px rgba(var(--color-shadow), 0.15);
     }
     
     .benefit-card:hover::before {
@@ -68,19 +68,19 @@
     .benefit-icon {
       width: 60px;
       height: 60px;
-      background: linear-gradient(135deg, #6366f1, #a855f7);
+      background: rgb(var(--color-button));
       border-radius: 1rem;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 1.5rem;
-      box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);
+      box-shadow: 0 4px 6px rgba(var(--color-button), 0.2);
     }
     
     .benefit-icon svg {
       width: 32px;
       height: 32px;
-      color: white;
+      color: rgb(var(--color-button-label));
     }
     
     .benefit-content h4 {

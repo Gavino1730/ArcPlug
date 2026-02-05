@@ -299,6 +299,11 @@
     <link rel="preload" href="{{ 'base.css' | asset_url }}" as="style">
     {{ 'base.css' | asset_url | stylesheet_tag }}
     <link rel="stylesheet" href="{{ 'enhanced-components.css' | asset_url }}" media="print" onload="this.media='all'">
+    
+    {%- comment -%} Home page conversion optimization styles {%- endcomment -%}
+    {%- if template.name == 'index' -%}
+      <link rel="stylesheet" href="{{ 'home-page-conversion.css' | asset_url }}" media="print" onload="this.media='all'">
+    {%- endif -%}
 
     {%- if settings.cart_type == 'drawer' -%}
       <link rel="stylesheet" href="{{ 'component-cart-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -413,6 +418,12 @@
           "{{ 'performance-optimizer.js' | asset_url }}",
           "{{ 'conversion-optimizer.js' | asset_url }}",
           "{{ 'sales-maximizer.js' | asset_url }}"
+        ];
+        
+        // Add home page conversion script for index template
+        {% if template.name == 'index' %}
+          scripts.push("{{ 'home-page-conversion.js' | asset_url }}");
+        {% endif %}
         ];
         scripts.forEach(src => {
           const script = document.createElement('script');

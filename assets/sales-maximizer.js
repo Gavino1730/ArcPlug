@@ -7,7 +7,7 @@ class SalesMaximizer {
   constructor() {
     this.config = {
       scarcityTimersEnabled: true,
-      upsellsEnabled: true,
+      upsellsEnabled: false,
       bundleOffersEnabled: true,
       emailCaptureEnabled: true,
       dynamicPricingEnabled: true,

@@ -6,7 +6,7 @@
 <div class="product-guarantee" {{ block.shopify_attributes }}>
   <style>
     .product-guarantee {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+      background: rgba(var(--color-button), 0.05);
       border-radius: 1rem;
       padding: 2rem;
       margin: 2rem 0;
@@ -46,12 +46,12 @@
       flex-shrink: 0;
       width: 48px;
       height: 48px;
-      background: linear-gradient(135deg, #6366f1, #a855f7);
+      background: rgb(var(--color-button));
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
+      color: rgb(var(--color-button-label));
     }
     
     .guarantee-icon svg {

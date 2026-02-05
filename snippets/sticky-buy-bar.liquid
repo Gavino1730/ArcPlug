@@ -13,7 +13,7 @@
       background: rgb(var(--color-background));
       border-top: 1px solid rgba(var(--color-border), 0.2);
       padding: 0.75rem 1rem;
-      box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 -4px 6px -1px rgba(var(--color-shadow), 0.15), 0 -2px 4px -1px rgba(var(--color-shadow), 0.1);
       z-index: 999;
       transform: translateY(100%);
       transition: transform 0.3s ease;
@@ -70,8 +70,8 @@
     
     .sticky-buy-button {
       flex-shrink: 0;
-      background: linear-gradient(135deg, #6366f1, #a855f7);
-      color: white;
+      background: rgba(var(--color-button), var(--alpha-button-background));
+      color: rgb(var(--color-button-label));
       border: none;
       padding: 0.75rem 1.5rem;
       border-radius: 0.5rem;
@@ -84,7 +84,7 @@
     
     .sticky-buy-button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 10px 15px -3px rgba(var(--color-button), 0.3);
     }
     
     .sticky-buy-button:active {

@@ -1,5 +1,5 @@
 # Copilot Instructions
-
+ALWAYS FIX ERRORS AND BUGS IN THE CODE.
 ## Business Context
 
 ### The Arc Plug Overview
