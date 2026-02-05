@@ -1,0 +1,187 @@
+{% comment %}
+  Product FAQ Accordion
+  Answers common questions to reduce purchase hesitation
+{% endcomment %}
+
+<div class="product-faq" {{ block.shopify_attributes }}>
+  <style>
+    .product-faq {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: rgba(var(--color-background), 0.5);
+      border-radius: 1rem;
+    }
+    
+    .faq-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .faq-header h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: rgb(var(--color-foreground));
+    }
+    
+    .faq-header p {
+      font-size: 1rem;
+      color: rgba(var(--color-foreground), 0.7);
+    }
+    
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .faq-item {
+      background: rgb(var(--color-background));
+      border: 1px solid rgba(var(--color-border), 0.2);
+      border-radius: 0.75rem;
+      overflow: hidden;
+      transition: box-shadow 0.2s ease;
+    }
+    
+    .faq-item:hover {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .faq-question {
+      width: 100%;
+      text-align: left;
+      padding: 1.25rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: rgb(var(--color-foreground));
+    }
+    
+    .faq-question:hover {
+      background: rgba(var(--color-foreground), 0.02);
+    }
+    
+    .faq-icon {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      transition: transform 0.3s ease;
+      color: #6366f1;
+    }
+    
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+    }
+    
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      padding: 0 1.25rem;
+    }
+    
+    .faq-item.active .faq-answer {
+      max-height: 500px;
+      padding: 0 1.25rem 1.25rem;
+    }
+    
+    .faq-answer p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: rgba(var(--color-foreground), 0.8);
+      margin: 0;
+    }
+    
+    @media screen and (max-width: 749px) {
+      .product-faq {
+        padding: 1.5rem 1rem;
+      }
+      
+      .faq-question {
+        font-size: 1rem;
+        padding: 1rem;
+      }
+      
+      .faq-answer {
+        padding: 0 1rem;
+      }
+      
+      .faq-item.active .faq-answer {
+        padding: 0 1rem 1rem;
+      }
+    }
+  </style>
+  
+  <div class="faq-header">
+    <h3>❓ Frequently Asked Questions</h3>
+    <p>Get answers to common questions about this product</p>
+  </div>
+  
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+        <span>What's your return policy?</span>
+        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div class="faq-answer">
+        <p>We offer a 30-day money-back guarantee. If you're not completely satisfied, return the product in its original condition for a full refund. No questions asked!</p>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+        <span>How long does shipping take?</span>
+        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div class="faq-answer">
+        <p>Orders typically ship within 1-2 business days and arrive in 3-7 business days depending on your location. Free shipping is included on all orders over $50!</p>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+        <span>Is this product authentic?</span>
+        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div class="faq-answer">
+        <p>100% authentic and guaranteed. We source directly from authorized distributors and manufacturers. Every product comes with verification and warranty support.</p>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+        <span>What payment methods do you accept?</span>
+        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div class="faq-answer">
+        <p>We accept all major credit cards (Visa, Mastercard, American Express), PayPal, Apple Pay, Google Pay, and Shop Pay. All transactions are secure and encrypted.</p>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+        <span>Do you offer customer support?</span>
+        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div class="faq-answer">
+        <p>Yes! Our customer support team is available 24/7 via email and phone. We're here to help with any questions or concerns you may have.</p>
+      </div>
+    </div>
+  </div>
+</div>

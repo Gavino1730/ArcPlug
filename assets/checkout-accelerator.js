@@ -30,6 +30,8 @@ class CheckoutAccelerator {
     this.setupABTesting();
     this.addCheckoutGuarantees();
     this.optimizePaymentOptions();
+    this.enableOneClickReorder();
+    this.addSocialProof();
   }
 
   optimizeCheckoutFlow() {
@@ -460,6 +462,130 @@ class CheckoutAccelerator {
         });
       }
     });
+  }
+
+  enableOneClickReorder() {
+    // Store last order in localStorage for quick reorder
+    const checkoutBtn = document.querySelector('[name="checkout"]');
+    if (checkoutBtn) {
+      checkoutBtn.addEventListener('click', () => {
+        const cartItems = Array.from(document.querySelectorAll('.cart-item')).map(item => ({
+          id: item.dataset.variantId,
+          quantity: item.querySelector('[name="updates[]"]')?.value || 1
+        }));
+        
+        if (cartItems.length > 0) {
+          localStorage.setItem('lastOrder', JSON.stringify({
+            items: cartItems,
+            date: new Date().toISOString()
+          }));
+        }
+      });
+    }
+
+    // Add reorder button if there's a previous order
+    const lastOrder = localStorage.getItem('lastOrder');
+    if (lastOrder) {
+      try {
+        const order = JSON.parse(lastOrder);
+        const daysSince = Math.floor((Date.now() - new Date(order.date)) / (1000 * 60 * 60 * 24));
+        
+        if (daysSince > 0 && daysSince < 90) {
+          const reorderBtn = document.createElement('button');
+          reorderBtn.className = 'reorder-quick-btn';
+          reorderBtn.innerHTML = `
+            <div style="padding: 12px; background: #fef3c7; border: 2px dashed #fbbf24; border-radius: 8px; margin: 16px 0; text-align: center; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#fde68a'" onmouseout="this.style.background='#fef3c7'">
+              <span style="font-size: 14px; font-weight: 600; color: #92400e;">
+                🔄 Quick Reorder Last Purchase (${daysSince} day${daysSince !== 1 ? 's' : ''} ago)
+              </span>
+            </div>
+          `;
+          
+          const cartForm = document.querySelector('.cart');
+          if (cartForm) {
+            cartForm.insertBefore(reorderBtn, cartForm.firstChild);
+            
+            reorderBtn.addEventListener('click', async () => {
+              reorderBtn.innerHTML = '<div style="text-align: center; padding: 12px;">Adding items...</div>';
+              
+              for (const item of order.items) {
+                await fetch('/cart/add.js', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ id: item.id, quantity: item.quantity })
+                });
+              }
+              
+              location.reload();
+            });
+          }
+        }
+      } catch (e) {
+        console.log('Could not parse last order');
+      }
+    }
+  }
+
+  addSocialProof() {
+    // Add recent purchase notifications
+    const recentPurchases = [
+      { name: 'Sarah M.', location: 'New York', time: '2 minutes ago', product: 'Premium Bundle' },
+      { name: 'John D.', location: 'Los Angeles', time: '5 minutes ago', product: 'Starter Pack' },
+      { name: 'Emma W.', location: 'Chicago', time: '8 minutes ago', product: 'Pro Edition' },
+      { name: 'Michael R.', location: 'Miami', time: '12 minutes ago', product: 'Deluxe Set' }
+    ];
+
+    let currentIndex = 0;
+    const notification = document.createElement('div');
+    notification.className = 'social-proof-notification';
+    notification.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      z-index: 999;
+      max-width: 320px;
+      transform: translateY(150%);
+      transition: transform 0.5s ease;
+    `;
+
+    notification.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; flex-shrink: 0;">
+          ✓
+        </div>
+        <div style="flex: 1;">
+          <div style="font-weight: 600; font-size: 14px; color: #111827;" class="purchase-name"></div>
+          <div style="font-size: 12px; color: #6b7280; margin-top: 2px;" class="purchase-details"></div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(notification);
+
+    function showNextPurchase() {
+      const purchase = recentPurchases[currentIndex];
+      notification.querySelector('.purchase-name').textContent = `${purchase.name} from ${purchase.location}`;
+      notification.querySelector('.purchase-details').textContent = `Purchased ${purchase.product} • ${purchase.time}`;
+      
+      notification.style.transform = 'translateY(0)';
+      
+      setTimeout(() => {
+        notification.style.transform = 'translateY(150%)';
+      }, 5000);
+      
+      currentIndex = (currentIndex + 1) % recentPurchases.length;
+    }
+
+    // Show first notification after 10 seconds, then every 30 seconds
+    setTimeout(() => {
+      showNextPurchase();
+      setInterval(showNextPurchase, 30000);
+    }, 10000);
   }
 
   // Get metrics

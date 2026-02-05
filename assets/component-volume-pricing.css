@@ -1,26 +1,44 @@
 volume-pricing {
   display: block;
   margin-top: 2rem;
+  border: 1px solid rgba(var(--color-border), 0.2);
+  border-radius: 0.5rem;
+  overflow: hidden;
 }
 
 volume-pricing li:nth-child(odd) {
   background: rgba(var(--color-foreground), 0.04);
 }
 
+volume-pricing li:nth-child(even) {
+  background: rgba(var(--color-foreground), 0.02);
+}
+
 volume-pricing ul {
   margin-top: 1.2rem;
+  margin-bottom: 0;
 }
 
 volume-pricing li {
   font-size: 1.4rem;
   letter-spacing: 0.06rem;
-  padding: 0.6rem 0.8rem;
+  padding: 0.8rem 1rem;
   display: flex;
   justify-content: space-between;
+  color: rgba(var(--color-foreground), 0.85);
+  transition: background 0.2s ease;
+}
+
+volume-pricing li:hover {
+  background: rgba(var(--color-foreground), 0.06);
 }
 
 div.volume-pricing-note {
   margin-top: -2.6rem;
+  background: rgba(var(--color-foreground), 0.04);
+  padding: 0.8rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(var(--color-border), 0.2);
 }
 
 .product--no-media .volume-pricing-note {
@@ -35,10 +53,16 @@ div.volume-pricing-note {
 volume-pricing .label-show-more {
   font-size: 1.2rem;
   letter-spacing: 0.07rem;
+  color: rgba(var(--color-foreground), 0.75);
 }
 
 volume-pricing show-more-button {
   margin-top: 0.8rem;
+}
+
+volume-pricing .caption-large {
+  color: rgba(var(--color-foreground), 0.85);
+  font-weight: 600;
 }
 
 .product-form__input price-per-item,

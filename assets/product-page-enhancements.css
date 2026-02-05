@@ -1,0 +1,412 @@
+/**
+ * Enhanced Product Page Styles
+ * Conversion-optimized styling for maximum sales
+ */
+
+/* ===========================
+   CTA BUTTON ENHANCEMENTS
+   =========================== */
+
+/* Main Add to Cart Button - Premium Styling */
+.product-form__submit {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%) !important;
+  border: none !important;
+  box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4) !important;
+  font-size: 1.125rem !important;
+  font-weight: 700 !important;
+  padding: 1.25rem 2.5rem !important;
+  border-radius: 0.75rem !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.product-form__submit::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.product-form__submit:hover {
+  transform: translateY(-3px) scale(1.02) !important;
+  box-shadow: 0 15px 35px -5px rgba(99, 102, 241, 0.5) !important;
+}
+
+.product-form__submit:hover::before {
+  left: 100%;
+}
+
+.product-form__submit:active {
+  transform: translateY(-1px) scale(1) !important;
+}
+
+/* Add urgency animation to CTA */
+@keyframes ctaPulse {
+  0%, 100% {
+    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+  }
+  50% {
+    box-shadow: 0 10px 35px -5px rgba(99, 102, 241, 0.6);
+  }
+}
+
+.product-form__submit {
+  animation: ctaPulse 2s ease-in-out infinite;
+}
+
+/* ===========================
+   PRODUCT PRICE STYLING
+   =========================== */
+
+.price {
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  color: #6366f1 !important;
+  margin: 1rem 0 !important;
+}
+
+.price--on-sale .price__regular {
+  color: #dc2626 !important;
+  text-decoration: line-through;
+  opacity: 0.6;
+  font-size: 1.5rem !important;
+}
+
+.price__sale {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.price__sale .price-item--sale {
+  font-size: 2.5rem !important;
+  color: #059669 !important;
+  font-weight: 900 !important;
+}
+
+/* Sale badge */
+.badge {
+  background: linear-gradient(135deg, #dc2626, #991b1b) !important;
+  color: white !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 0.5rem !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  animation: badgePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* ===========================
+   PRODUCT IMAGES
+   =========================== */
+
+.product__media-wrapper {
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.product__media img {
+  transition: transform 0.5s ease;
+}
+
+.product__media:hover img {
+  transform: scale(1.05);
+}
+
+/* ===========================
+   QUANTITY SELECTOR
+   =========================== */
+
+.quantity__input {
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+  min-width: 60px !important;
+  text-align: center !important;
+}
+
+.quantity__button {
+  background: linear-gradient(135deg, #f3f4f6, #e5e7eb) !important;
+  border: 1px solid #d1d5db !important;
+  transition: all 0.2s ease !important;
+}
+
+.quantity__button:hover {
+  background: linear-gradient(135deg, #e5e7eb, #d1d5db) !important;
+  transform: scale(1.1);
+}
+
+/* ===========================
+   VARIANT PICKER
+   =========================== */
+
+.product-form__input--swatch .swatch {
+  width: 50px;
+  height: 50px;
+  border-radius: 0.5rem;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.product-form__input--swatch .swatch:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.product-form__input--swatch input:checked + label {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Button style variants */
+.product-form__input--pill input:checked + label {
+  background: linear-gradient(135deg, #6366f1, #a855f7) !important;
+  color: white !important;
+  border-color: #6366f1 !important;
+}
+
+/* ===========================
+   PRODUCT TITLE
+   =========================== */
+
+.product__title h1,
+.product__title h2 {
+  font-size: 2.5rem !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  margin-bottom: 1rem !important;
+  color: rgb(var(--color-foreground)) !important;
+}
+
+@media screen and (max-width: 749px) {
+  .product__title h1,
+  .product__title h2 {
+    font-size: 1.875rem !important;
+  }
+}
+
+/* ===========================
+   RATING STARS
+   =========================== */
+
+.rating-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.1));
+  border-radius: 0.5rem;
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.rating-star {
+  color: #fbbf24 !important;
+}
+
+.rating-text {
+  font-weight: 600 !important;
+  color: #d97706 !important;
+}
+
+.rating-count {
+  color: rgba(var(--color-foreground), 0.6) !important;
+}
+
+/* ===========================
+   INVENTORY STATUS
+   =========================== */
+
+.product__inventory {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600 !important;
+  margin: 1rem 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.product__inventory .svg-wrapper {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ===========================
+   ACCORDION / COLLAPSIBLE
+   =========================== */
+
+.product__accordion details {
+  border: 1px solid rgba(var(--color-border), 0.2);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  background: rgba(var(--color-background), 0.5);
+  transition: all 0.2s ease;
+}
+
+.product__accordion details:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.product__accordion summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: color 0.2s ease;
+}
+
+.product__accordion summary:hover {
+  color: #6366f1;
+}
+
+.product__accordion .accordion__content {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(var(--color-border), 0.1);
+  line-height: 1.7;
+}
+
+/* ===========================
+   MOBILE OPTIMIZATIONS
+   =========================== */
+
+@media screen and (max-width: 749px) {
+  .product-form__submit {
+    width: 100%;
+    padding: 1rem 2rem !important;
+    font-size: 1rem !important;
+  }
+  
+  .price {
+    font-size: 1.75rem !important;
+  }
+  
+  .price__sale .price-item--sale {
+    font-size: 2rem !important;
+  }
+  
+  /* Ensure touch-friendly buttons */
+  .quantity__button,
+  .swatch,
+  .product-form__input--pill label {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* ===========================
+   LOADING STATES
+   =========================== */
+
+.product-form__submit.loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.product-form__submit.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===========================
+   SUCCESS STATE
+   =========================== */
+
+.product-form__submit.added {
+  background: linear-gradient(135deg, #059669, #047857) !important;
+}
+
+.product-form__submit.added::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  animation: checkmark 0.3s ease;
+}
+
+@keyframes checkmark {
+  0% { transform: translate(-50%, -50%) scale(0); }
+  50% { transform: translate(-50%, -50%) scale(1.2); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+/* ===========================
+   SOCIAL PROOF BADGES
+   =========================== */
+
+.product__trust-section {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(168, 85, 247, 0.05));
+  border-radius: 1rem;
+  border: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+.product__trust-item {
+  text-align: center;
+  padding: 1rem;
+}
+
+.product__trust-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.product__trust-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(var(--color-foreground), 0.8);
+  margin: 0;
+}
+
+/* ===========================
+   SCROLLBAR STYLING
+   =========================== */
+
+.product__info-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.product__info-container::-webkit-scrollbar-track {
+  background: rgba(var(--color-border), 0.1);
+  border-radius: 4px;
+}
+
+.product__info-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  border-radius: 4px;
+}
+
+.product__info-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #4f46e5, #9333ea);
+}

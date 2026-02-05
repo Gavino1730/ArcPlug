@@ -47,6 +47,9 @@ class CartDrawer extends HTMLElement {
     );
 
     document.body.classList.add('overflow-hidden');
+    
+    // Add conversion optimization on cart open
+    this.optimizeCartForConversion();
   }
 
   close() {
@@ -111,6 +114,70 @@ class CartDrawer extends HTMLElement {
 
   setActiveElement(element) {
     this.activeElement = element;
+  }
+
+  optimizeCartForConversion() {
+    // Add free shipping progress bar if not already added
+    setTimeout(() => {
+      const cartDrawer = document.getElementById('CartDrawer');
+      if (!cartDrawer || cartDrawer.querySelector('.shipping-progress-bar')) return;
+
+      const cartTotal = parseFloat(cartDrawer.dataset.cartTotal || 0);
+      const freeShippingThreshold = 75; // $75 for free shipping
+      const remaining = Math.max(0, freeShippingThreshold - cartTotal);
+      const progress = Math.min(100, (cartTotal / freeShippingThreshold) * 100);
+
+      const progressBar = document.createElement('div');
+      progressBar.className = 'shipping-progress-bar';
+      progressBar.innerHTML = `
+        <div style="padding: 16px; background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-bottom: 2px solid #86efac; margin-bottom: 16px;">
+          ${remaining > 0 ? `
+            <div style="text-align: center; margin-bottom: 12px; font-size: 14px; font-weight: 600; color: #166534;">
+              🚚 Add <strong>$${remaining.toFixed(2)}</strong> more for FREE shipping!
+            </div>
+          ` : `
+            <div style="text-align: center; margin-bottom: 12px; font-size: 14px; font-weight: 600; color: #166534;">
+              🎉 Congrats! You've qualified for FREE shipping!
+            </div>
+          `}
+          <div style="background: #d1fae5; height: 8px; border-radius: 20px; overflow: hidden;">
+            <div style="background: linear-gradient(90deg, #10b981 0%, #059669 100%); height: 100%; width: ${progress}%; transition: width 0.5s ease; border-radius: 20px;"></div>
+          </div>
+        </div>
+      `;
+
+      const drawerInner = cartDrawer.querySelector('.drawer__inner');
+      if (drawerInner) {
+        drawerInner.insertBefore(progressBar, drawerInner.firstChild);
+      }
+
+      // Add trust badges in cart
+      if (!cartDrawer.querySelector('.cart-trust-badges')) {
+        const trustBadges = document.createElement('div');
+        trustBadges.className = 'cart-trust-badges';
+        trustBadges.innerHTML = `
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 12px; background: #fef3c7; border-radius: 8px; margin: 16px 0; font-size: 11px; text-align: center;">
+            <div>
+              <div style="font-size: 20px; margin-bottom: 4px;">🔒</div>
+              <div style="font-weight: 600; color: #78350f;">Secure</div>
+            </div>
+            <div>
+              <div style="font-size: 20px; margin-bottom: 4px;">✓</div>
+              <div style="font-weight: 600; color: #78350f;">Guaranteed</div>
+            </div>
+            <div>
+              <div style="font-size: 20px; margin-bottom: 4px;">↩️</div>
+              <div style="font-weight: 600; color: #78350f;">Easy Returns</div>
+            </div>
+          </div>
+        `;
+        
+        const checkoutButton = cartDrawer.querySelector('.cart__checkout-button, [name="checkout"]');
+        if (checkoutButton && checkoutButton.parentElement) {
+          checkoutButton.parentElement.insertBefore(trustBadges, checkoutButton);
+        }
+      }
+    }, 100);
   }
 }
 

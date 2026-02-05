@@ -1,0 +1,368 @@
+{% comment %}
+  Urgency Banner - Sticky Top Banner
+  Creates urgency with limited-time offers and countdown
+{% endcomment %}
+
+{%- if section.settings.enable_banner -%}
+<div 
+  class="urgency-banner color-{{ section.settings.color_scheme }} gradient{% if section.settings.sticky %} urgency-banner--sticky{% endif %}"
+  id="urgency-banner-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="urgency-banner__wrapper page-width">
+    <div class="urgency-banner__content">
+      {%- if section.settings.show_icon -%}
+        <span class="urgency-banner__icon">{{ section.settings.icon }}</span>
+      {%- endif -%}
+      
+      <div class="urgency-banner__text">
+        <strong>{{ section.settings.message }}</strong>
+      </div>
+
+      {%- if section.settings.show_countdown -%}
+        <div class="urgency-banner__countdown" data-countdown-type="{{ section.settings.countdown_type }}">
+          <span class="countdown-label">Ends in:</span>
+          <div class="countdown-timer">
+            <span class="countdown-value" data-hours>00</span>:
+            <span class="countdown-value" data-minutes>00</span>:
+            <span class="countdown-value" data-seconds>00</span>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.button_text != blank -%}
+        <a href="{{ section.settings.button_link }}" class="urgency-banner__button button button--small">
+          {{ section.settings.button_text }}
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.dismissible -%}
+      <button 
+        class="urgency-banner__close" 
+        aria-label="Close banner"
+        onclick="this.closest('.urgency-banner').style.display='none'; sessionStorage.setItem('urgencyBannerDismissed-{{ section.id }}', 'true');"
+      >
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 1L13 13M1 13L13 1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    {%- endif -%}
+  </div>
+</div>
+
+<style>
+  .urgency-banner {
+    position: relative;
+    padding: 12px 0;
+    z-index: 100;
+  }
+
+  .urgency-banner--sticky {
+    position: sticky;
+    top: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .urgency-banner__wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .urgency-banner__content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .urgency-banner__icon {
+    font-size: 1.75rem;
+    line-height: 1;
+  }
+
+  .urgency-banner__text {
+    font-size: 1.125rem;
+    line-height: 1.4;
+    font-family: var(--font-body-family);
+    font-weight: 600;
+    letter-spacing: 0.02rem;
+  }
+
+  .urgency-banner__countdown {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.25rem;
+    font-family: var(--font-body-family);
+  }
+
+  .countdown-timer {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-family: var(--font-heading-family);
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.05rem;
+  }
+
+  .countdown-value {
+    min-width: 28px;
+    text-align: center;
+  }
+
+  .urgency-banner__button {
+    padding: 8px 20px;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  .urgency-banner__close {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+    color: inherit;
+  }
+
+  .urgency-banner__close:hover {
+    opacity: 1;
+  }
+
+  @media screen and (max-width: 749px) {
+    .urgency-banner {
+      padding: 10px 0;
+    }
+
+    .urgency-banner__content {
+      gap: 10px;
+    }
+
+    .urgency-banner__icon {
+      font-size: 1.5rem;
+    }
+
+    .urgency-banner__text {
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    .urgency-banner__countdown {
+      font-size: 1.125rem;
+    }
+
+    .countdown-timer {
+      font-size: 1.375rem;
+    }
+
+    .urgency-banner__close {
+      position: relative;
+      transform: none;
+      margin-left: auto;
+    }
+  }
+</style>
+
+<script>
+(function() {
+  const banner = document.getElementById('urgency-banner-{{ section.id }}');
+  if (!banner) return;
+
+  // Check if banner was dismissed
+  const dismissed = sessionStorage.getItem('urgencyBannerDismissed-{{ section.id }}');
+  if (dismissed && {{ section.settings.dismissible | json }}) {
+    banner.style.display = 'none';
+    return;
+  }
+
+  const countdown = banner.querySelector('[data-countdown-type]');
+  if (!countdown) return;
+
+  const countdownType = countdown.getAttribute('data-countdown-type');
+
+  function updateCountdown() {
+    const now = new Date();
+    let targetTime = new Date();
+
+    switch (countdownType) {
+      case 'end_of_day':
+        targetTime.setHours(23, 59, 59, 999);
+        break;
+      case 'end_of_week':
+        const daysUntilSunday = 7 - now.getDay();
+        targetTime.setDate(now.getDate() + daysUntilSunday);
+        targetTime.setHours(23, 59, 59, 999);
+        break;
+      case '24_hours':
+        targetTime = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+        break;
+      default:
+        targetTime.setHours(23, 59, 59, 999);
+    }
+
+    const diff = targetTime - now;
+    
+    if (diff <= 0) {
+      targetTime = new Date();
+      targetTime.setHours(23, 59, 59, 999);
+    }
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    const hoursEl = countdown.querySelector('[data-hours]');
+    const minutesEl = countdown.querySelector('[data-minutes]');
+    const secondsEl = countdown.querySelector('[data-seconds]');
+
+    if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+    if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+    if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+})();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Urgency Banner",
+  "tag": "section",
+  "class": "section-urgency-banner",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_banner",
+      "default": true,
+      "label": "Enable urgency banner"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "accent-1",
+          "label": "Accent 1"
+        },
+        {
+          "value": "accent-2",
+          "label": "Accent 2"
+        },
+        {
+          "value": "background-1",
+          "label": "Background 1"
+        },
+        {
+          "value": "background-2",
+          "label": "Background 2"
+        },
+        {
+          "value": "inverse",
+          "label": "Inverse"
+        }
+      ],
+      "default": "accent-1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky",
+      "default": true,
+      "label": "Make banner sticky",
+      "info": "Banner will stay at top of page when scrolling"
+    },
+    {
+      "type": "checkbox",
+      "id": "dismissible",
+      "default": true,
+      "label": "Allow users to dismiss"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_icon",
+      "default": true,
+      "label": "Show icon"
+    },
+    {
+      "type": "text",
+      "id": "icon",
+      "default": "🔥",
+      "label": "Icon",
+      "info": "Use emoji"
+    },
+    {
+      "type": "textarea",
+      "id": "message",
+      "default": "Limited Time: Extra 15% OFF Everything!",
+      "label": "Message"
+    },
+    {
+      "type": "header",
+      "content": "Countdown Timer"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_countdown",
+      "default": true,
+      "label": "Show countdown timer"
+    },
+    {
+      "type": "select",
+      "id": "countdown_type",
+      "options": [
+        {
+          "value": "end_of_day",
+          "label": "End of day (resets daily)"
+        },
+        {
+          "value": "end_of_week",
+          "label": "End of week (resets Sunday)"
+        },
+        {
+          "value": "24_hours",
+          "label": "24 hours from now"
+        }
+      ],
+      "default": "end_of_day",
+      "label": "Countdown type"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "default": "Shop Now",
+      "label": "Button text"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Urgency Banner"
+    }
+  ]
+}
+{% endschema %}

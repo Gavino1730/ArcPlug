@@ -234,7 +234,7 @@ class ConversionOptimizer {
         window.uxEnhancer.showToast(purchases[index % purchases.length], 'success', 4000);
         index++;
       }
-    }, 45000); // Every 45 seconds
+    }, 30000); // Every 30 seconds
   }
 
   // Smart product recommendations

@@ -36,7 +36,6 @@ class SalesMaximizer {
     this.highlightBestReviews();
     this.addComparisonTool();
     this.optimizeCTAs();
-    this.setupLiveChat();
     this.addStockAlerts();
   }
 
@@ -466,26 +465,6 @@ class SalesMaximizer {
         btn.style.boxShadow = '0 4px 16px rgba(16, 185, 129, 0.4)';
       });
     });
-  }
-
-  // Add live chat prompt
-  setupLiveChat() {
-    // Add chat button
-    const chatBtn = document.createElement('div');
-    chatBtn.className = 'live-chat-button';
-    chatBtn.innerHTML = `
-      <div style="position: fixed; bottom: 24px; right: 24px; z-index: 9999;">
-        <button style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px 24px; border: none; border-radius: 999px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4); display: flex; align-items: center; gap: 8px; transition: all 0.3s;"
-          onmouseover="this.style.transform='scale(1.05)'"
-          onmouseout="this.style.transform='scale(1)'"
-          onclick="alert('Chat feature would connect here!')">
-          💬 Need Help? Chat Now!
-          <span style="width: 10px; height: 10px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite;"></span>
-        </button>
-      </div>
-    `;
-
-    document.body.appendChild(chatBtn);
   }
 
   // Stock alert notifications

@@ -1,0 +1,380 @@
+{% comment %}
+  Size & Fit Guide Modal
+  Helps customers choose the right size, reducing returns
+{% endcomment %}
+
+<button type="button" class="size-guide-trigger" onclick="document.getElementById('sizeGuideModal').style.display='flex'">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+  </svg>
+  <span>Size Guide</span>
+</button>
+
+<div class="size-guide-modal" id="sizeGuideModal" style="display: none;">
+  <style>
+    .size-guide-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: none;
+      border: 1px solid rgba(var(--color-border), 0.5);
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: rgb(var(--color-foreground));
+      transition: all 0.2s ease;
+      margin: 0.5rem 0;
+    }
+    
+    .size-guide-trigger:hover {
+      background: rgba(var(--color-foreground), 0.05);
+      border-color: rgba(var(--color-border), 0.8);
+    }
+    
+    .size-guide-trigger svg {
+      width: 16px;
+      height: 16px;
+    }
+    
+    .size-guide-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      backdrop-filter: blur(4px);
+    }
+    
+    .size-guide-content {
+      background: rgb(var(--color-background));
+      border-radius: 1rem;
+      max-width: 800px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+    
+    .size-guide-header {
+      position: sticky;
+      top: 0;
+      background: rgb(var(--color-background));
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(var(--color-border), 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1;
+    }
+    
+    .size-guide-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+      color: rgb(var(--color-foreground));
+    }
+    
+    .size-guide-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      color: rgba(var(--color-foreground), 0.6);
+      transition: color 0.2s ease;
+    }
+    
+    .size-guide-close:hover {
+      color: rgb(var(--color-foreground));
+    }
+    
+    .size-guide-close svg {
+      width: 24px;
+      height: 24px;
+    }
+    
+    .size-guide-body {
+      padding: 2rem;
+    }
+    
+    .size-guide-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid rgba(var(--color-border), 0.2);
+    }
+    
+    .size-guide-tab {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      color: rgba(var(--color-foreground), 0.6);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s ease;
+    }
+    
+    .size-guide-tab:hover {
+      color: rgb(var(--color-foreground));
+    }
+    
+    .size-guide-tab.active {
+      color: #6366f1;
+      border-bottom-color: #6366f1;
+    }
+    
+    .size-guide-panel {
+      display: none;
+    }
+    
+    .size-guide-panel.active {
+      display: block;
+    }
+    
+    .size-chart {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    
+    .size-chart th,
+    .size-chart td {
+      padding: 1rem;
+      text-align: left;
+      border: 1px solid rgba(var(--color-border), 0.2);
+    }
+    
+    .size-chart th {
+      background: rgba(var(--color-foreground), 0.05);
+      font-weight: 600;
+      color: rgb(var(--color-foreground));
+    }
+    
+    .size-chart td {
+      color: rgba(var(--color-foreground), 0.8);
+    }
+    
+    .size-chart tbody tr:hover {
+      background: rgba(var(--color-foreground), 0.02);
+    }
+    
+    .measure-guide {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    
+    .measure-item h4 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: rgb(var(--color-foreground));
+    }
+    
+    .measure-item p {
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: rgba(var(--color-foreground), 0.7);
+    }
+    
+    @media screen and (max-width: 749px) {
+      .size-guide-content {
+        max-height: 100vh;
+        border-radius: 0;
+      }
+      
+      .size-guide-body {
+        padding: 1.5rem 1rem;
+      }
+      
+      .size-guide-tabs {
+        overflow-x: auto;
+      }
+      
+      .size-chart {
+        font-size: 0.875rem;
+      }
+      
+      .size-chart th,
+      .size-chart td {
+        padding: 0.75rem 0.5rem;
+      }
+    }
+  </style>
+  
+  <div class="size-guide-content">
+    <div class="size-guide-header">
+      <h2>📏 Size & Fit Guide</h2>
+      <button class="size-guide-close" onclick="document.getElementById('sizeGuideModal').style.display='none'">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    
+    <div class="size-guide-body">
+      <div class="size-guide-tabs">
+        <button class="size-guide-tab active" onclick="switchSizeTab(event, 'sizeChart')">Size Chart</button>
+        <button class="size-guide-tab" onclick="switchSizeTab(event, 'howToMeasure')">How to Measure</button>
+        <button class="size-guide-tab" onclick="switchSizeTab(event, 'fitTips')">Fit Tips</button>
+      </div>
+      
+      <div id="sizeChart" class="size-guide-panel active">
+        <h3 style="margin-bottom: 1rem; color: rgb(var(--color-foreground));">Size Chart</h3>
+        <table class="size-chart">
+          <thead>
+            <tr>
+              <th>Size</th>
+              <th>Chest (in)</th>
+              <th>Waist (in)</th>
+              <th>Hips (in)</th>
+              <th>Length (in)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>XS</strong></td>
+              <td>32-34</td>
+              <td>24-26</td>
+              <td>34-36</td>
+              <td>26</td>
+            </tr>
+            <tr>
+              <td><strong>S</strong></td>
+              <td>35-37</td>
+              <td>27-29</td>
+              <td>37-39</td>
+              <td>27</td>
+            </tr>
+            <tr>
+              <td><strong>M</strong></td>
+              <td>38-40</td>
+              <td>30-32</td>
+              <td>40-42</td>
+              <td>28</td>
+            </tr>
+            <tr>
+              <td><strong>L</strong></td>
+              <td>41-43</td>
+              <td>33-35</td>
+              <td>43-45</td>
+              <td>29</td>
+            </tr>
+            <tr>
+              <td><strong>XL</strong></td>
+              <td>44-46</td>
+              <td>36-38</td>
+              <td>46-48</td>
+              <td>30</td>
+            </tr>
+            <tr>
+              <td><strong>XXL</strong></td>
+              <td>47-49</td>
+              <td>39-41</td>
+              <td>49-51</td>
+              <td>31</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size: 0.875rem; color: rgba(var(--color-foreground), 0.6); margin-top: 1rem;">
+          * Measurements are approximate and may vary by style. When in doubt, size up for a more comfortable fit.
+        </p>
+      </div>
+      
+      <div id="howToMeasure" class="size-guide-panel">
+        <h3 style="margin-bottom: 1rem; color: rgb(var(--color-foreground));">How to Measure</h3>
+        <div class="measure-guide">
+          <div class="measure-item">
+            <h4>Chest</h4>
+            <p>Measure around the fullest part of your chest, keeping the tape parallel to the floor.</p>
+          </div>
+          <div class="measure-item">
+            <h4>Waist</h4>
+            <p>Measure around your natural waistline, keeping the tape comfortably loose.</p>
+          </div>
+          <div class="measure-item">
+            <h4>Hips</h4>
+            <p>Measure around the fullest part of your hips, about 8 inches below your waist.</p>
+          </div>
+          <div class="measure-item">
+            <h4>Length</h4>
+            <p>Measure from the highest point of your shoulder to where you want the garment to end.</p>
+          </div>
+        </div>
+        <div style="background: rgba(99, 102, 241, 0.1); padding: 1.5rem; border-radius: 0.75rem; margin-top: 2rem;">
+          <h4 style="margin-bottom: 0.5rem; color: rgb(var(--color-foreground));">💡 Pro Tip</h4>
+          <p style="margin: 0; color: rgba(var(--color-foreground), 0.8);">
+            For the most accurate measurements, have someone else measure you while you stand relaxed with your arms at your sides.
+          </p>
+        </div>
+      </div>
+      
+      <div id="fitTips" class="size-guide-panel">
+        <h3 style="margin-bottom: 1rem; color: rgb(var(--color-foreground));">Fit Tips</h3>
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: rgb(var(--color-foreground));">Between Sizes?</h4>
+            <p style="color: rgba(var(--color-foreground), 0.8);">
+              If you're between sizes, we recommend sizing up for a more comfortable, relaxed fit. If you prefer a fitted look, choose your smaller size.
+            </p>
+          </div>
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: rgb(var(--color-foreground));">Fabric Stretch</h4>
+            <p style="color: rgba(var(--color-foreground), 0.8);">
+              This item is made with stretch fabric that will mold to your body over time. Consider this when choosing your size.
+            </p>
+          </div>
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: rgb(var(--color-foreground));">Care Instructions</h4>
+            <p style="color: rgba(var(--color-foreground), 0.8);">
+              Wash in cold water and lay flat to dry to maintain the original fit and prevent shrinkage.
+            </p>
+          </div>
+          <div>
+            <h4 style="margin-bottom: 0.5rem; color: rgb(var(--color-foreground));">Still Unsure?</h4>
+            <p style="color: rgba(var(--color-foreground), 0.8);">
+              Contact our customer support team 24/7 for personalized fit advice. We're here to help you find your perfect size!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function switchSizeTab(event, tabId) {
+    // Hide all panels
+    document.querySelectorAll('.size-guide-panel').forEach(panel => {
+      panel.classList.remove('active');
+    });
+    
+    // Remove active class from all tabs
+    document.querySelectorAll('.size-guide-tab').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    
+    // Show selected panel and activate tab
+    document.getElementById(tabId).classList.add('active');
+    event.target.classList.add('active');
+  }
+  
+  // Close modal when clicking outside
+  document.getElementById('sizeGuideModal')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.style.display = 'none';
+    }
+  });
+</script>

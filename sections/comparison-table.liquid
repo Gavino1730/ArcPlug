@@ -1,0 +1,394 @@
+{% comment %}
+  Comparison Section - Why Choose Us Over Competitors
+  Shows clear advantages over competitors
+{% endcomment %}
+
+<div class="comparison-section color-{{ section.settings.color_scheme }} gradient">
+  <div class="comparison-section__wrapper page-width">
+    {%- if section.settings.heading != blank -%}
+      <div class="comparison-section__header">
+        <h2 class="comparison-section__heading h1">{{ section.settings.heading }}</h2>
+        {%- if section.settings.subheading != blank -%}
+          <p class="comparison-section__subheading">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="comparison-table">
+      <div class="comparison-table__row comparison-table__header">
+        <div class="comparison-table__cell comparison-table__feature-label"></div>
+        <div class="comparison-table__cell comparison-table__brand comparison-table__brand--us">
+          <div class="brand-header">
+            <span class="brand-icon">⭐</span>
+            <span class="brand-name">{{ section.settings.our_brand_name }}</span>
+          </div>
+        </div>
+        <div class="comparison-table__cell comparison-table__brand">
+          <span class="brand-name">{{ section.settings.competitor_name }}</span>
+        </div>
+      </div>
+
+      {%- for block in section.blocks -%}
+        <div class="comparison-table__row" {{ block.shopify_attributes }}>
+          <div class="comparison-table__cell comparison-table__feature">
+            {{ block.settings.feature }}
+          </div>
+          <div class="comparison-table__cell comparison-table__value comparison-table__value--us">
+            {%- if block.settings.our_value == 'check' -%}
+              <span class="check-icon">✓</span>
+            {%- elsif block.settings.our_value == 'x' -%}
+              <span class="x-icon">✗</span>
+            {%- else -%}
+              {{ block.settings.our_value }}
+            {%- endif -%}
+          </div>
+          <div class="comparison-table__cell comparison-table__value">
+            {%- if block.settings.competitor_value == 'check' -%}
+              <span class="check-icon">✓</span>
+            {%- elsif block.settings.competitor_value == 'x' -%}
+              <span class="x-icon">✗</span>
+            {%- else -%}
+              {{ block.settings.competitor_value }}
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.show_cta -%}
+      <div class="comparison-section__cta">
+        <a href="{{ section.settings.cta_link }}" class="button button--primary button--large">
+          {{ section.settings.cta_text }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<style>
+  .comparison-section {
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+  }
+
+  .comparison-section__header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .comparison-section__heading {
+    margin-bottom: 16px;
+  }
+
+  .comparison-section__subheading {
+    font-size: 1.125rem;
+    opacity: 0.85;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .comparison-table {
+    max-width: 800px;
+    margin: 0 auto 48px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(var(--color-shadow), 0.1);
+  }
+
+  .comparison-table__row {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+
+  .comparison-table__row:last-child {
+    border-bottom: none;
+  }
+
+  .comparison-table__header {
+    background: rgba(var(--color-foreground), 0.04);
+    font-weight: 700;
+  }
+
+  .comparison-table__cell {
+    padding: 20px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .comparison-table__feature-label {
+    background: transparent;
+  }
+
+  .comparison-table__feature {
+    font-weight: 500;
+    justify-content: flex-start;
+    text-align: left;
+    background: rgba(var(--color-foreground), 0.02);
+  }
+
+  .comparison-table__brand--us {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.15) 100%);
+  }
+
+  .brand-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .brand-icon {
+    font-size: 1.5rem;
+  }
+
+  .brand-name {
+    font-size: 0.9375rem;
+  }
+
+  .comparison-table__value--us {
+    background: rgba(16, 185, 129, 0.05);
+    font-weight: 600;
+  }
+
+  .check-icon {
+    color: #10b981;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .x-icon {
+    color: #ef4444;
+    font-size: 1.5rem;
+    font-weight: 700;
+    opacity: 0.5;
+  }
+
+  .comparison-section__cta {
+    text-align: center;
+  }
+
+  .button--large {
+    padding: 16px 48px;
+    font-size: 1.125rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .comparison-section {
+      padding: {{ section.settings.padding_top | divided_by: 1.5 }}px 0 {{ section.settings.padding_bottom | divided_by: 1.5 }}px;
+    }
+
+    .comparison-section__header {
+      margin-bottom: 32px;
+    }
+
+    .comparison-table__row {
+      grid-template-columns: 1fr 1fr 1fr;
+      font-size: 0.875rem;
+    }
+
+    .comparison-table__cell {
+      padding: 16px 8px;
+    }
+
+    .brand-icon {
+      font-size: 1.25rem;
+    }
+
+    .brand-name {
+      font-size: 0.8125rem;
+    }
+
+    .check-icon,
+    .x-icon {
+      font-size: 1.25rem;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Comparison Table",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "accent-1",
+          "label": "Accent 1"
+        },
+        {
+          "value": "accent-2",
+          "label": "Accent 2"
+        },
+        {
+          "value": "background-1",
+          "label": "Background 1"
+        },
+        {
+          "value": "background-2",
+          "label": "Background 2"
+        }
+      ],
+      "default": "background-1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Why Choose ArcPlug?",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "default": "Compare us to traditional retailers and see the difference",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "our_brand_name",
+      "default": "ArcPlug",
+      "label": "Your brand name"
+    },
+    {
+      "type": "text",
+      "id": "competitor_name",
+      "default": "Other Brands",
+      "label": "Competitor name"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "default": true,
+      "label": "Show call to action"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "default": "Shop Now & Save",
+      "label": "Button text"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "comparison_row",
+      "name": "Comparison Row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "feature",
+          "default": "Price",
+          "label": "Feature"
+        },
+        {
+          "type": "text",
+          "id": "our_value",
+          "default": "$149.99",
+          "label": "Your value",
+          "info": "Use 'check' for ✓, 'x' for ✗, or enter custom text"
+        },
+        {
+          "type": "text",
+          "id": "competitor_value",
+          "default": "$150+",
+          "label": "Competitor value",
+          "info": "Use 'check' for ✓, 'x' for ✗, or enter custom text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Comparison Table",
+      "blocks": [
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature": "Price",
+            "our_value": "$149.99",
+            "competitor_value": "$150+"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature": "Free Shipping",
+            "our_value": "check",
+            "competitor_value": "x"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature": "7-Day Returns",
+            "our_value": "check",
+            "competitor_value": "30-Day Only"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature": "Weather Tested",
+            "our_value": "check",
+            "competitor_value": "check"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature": "Premium Quality",
+            "our_value": "check",
+            "competitor_value": "check"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature": "Value for Money",
+            "our_value": "Excellent",
+            "competitor_value": "Fair"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

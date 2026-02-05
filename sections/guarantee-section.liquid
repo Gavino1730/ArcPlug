@@ -1,0 +1,382 @@
+{% comment %}
+  Guarantee Section - Risk Reversal
+  Removes purchase anxiety with strong guarantees
+{% endcomment %}
+
+<div class="guarantee-section color-{{ section.settings.color_scheme }} gradient">
+  <div class="guarantee-section__wrapper page-width">
+    <div class="guarantee-section__content">
+      <div class="guarantee-section__badge">
+        <div class="badge-icon">{{ section.settings.badge_icon }}</div>
+        <div class="badge-text">{{ section.settings.badge_text }}</div>
+      </div>
+
+      <div class="guarantee-section__main">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="guarantee-section__heading h1">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.description != blank -%}
+          <div class="guarantee-section__description">
+            {{ section.settings.description }}
+          </div>
+        {%- endif -%}
+
+        {%- if section.blocks.size > 0 -%}
+          <div class="guarantee-section__features">
+            {%- for block in section.blocks -%}
+              <div class="guarantee-feature" {{ block.shopify_attributes }}>
+                <span class="guarantee-feature__icon">{{ block.settings.icon }}</span>
+                <div class="guarantee-feature__content">
+                  <h3 class="guarantee-feature__title">{{ block.settings.title }}</h3>
+                  <p class="guarantee-feature__text">{{ block.settings.description }}</p>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.show_cta -%}
+          <div class="guarantee-section__cta">
+            <a href="{{ section.settings.cta_link }}" class="button button--primary button--large">
+              {{ section.settings.cta_text }}
+            </a>
+            {%- if section.settings.cta_subtext != blank -%}
+              <p class="guarantee-section__cta-subtext">{{ section.settings.cta_subtext }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .guarantee-section {
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+  }
+
+  .guarantee-section__content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .guarantee-section__badge {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 32px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border-radius: 50%;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto;
+    box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3);
+  }
+
+  .badge-icon {
+    font-size: 3.5rem;
+    line-height: 1;
+  }
+
+  .badge-text {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .guarantee-section__main {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .guarantee-section__heading {
+    margin: 0;
+  }
+
+  .guarantee-section__description {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    opacity: 0.85;
+  }
+
+  .guarantee-section__features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    margin-top: 16px;
+  }
+
+  .guarantee-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    text-align: left;
+    padding: 24px;
+    background: rgba(var(--color-foreground), 0.03);
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .guarantee-feature:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(var(--color-shadow), 0.1);
+  }
+
+  .guarantee-feature__icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .guarantee-feature__content {
+    flex: 1;
+  }
+
+  .guarantee-feature__title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .guarantee-feature__text {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    margin: 0;
+    opacity: 0.85;
+  }
+
+  .guarantee-section__cta {
+    margin-top: 16px;
+  }
+
+  .button--large {
+    padding: 16px 48px;
+    font-size: 1.125rem;
+  }
+
+  .guarantee-section__cta-subtext {
+    margin-top: 12px;
+    font-size: 0.875rem;
+    opacity: 0.7;
+  }
+
+  @media screen and (max-width: 749px) {
+    .guarantee-section {
+      padding: {{ section.settings.padding_top | divided_by: 1.5 }}px 0 {{ section.settings.padding_bottom | divided_by: 1.5 }}px;
+    }
+
+    .guarantee-section__badge {
+      width: 150px;
+      height: 150px;
+      padding: 24px;
+    }
+
+    .badge-icon {
+      font-size: 2.5rem;
+    }
+
+    .badge-text {
+      font-size: 0.75rem;
+    }
+
+    .guarantee-section__features {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .guarantee-feature {
+      padding: 20px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Guarantee Section",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "accent-1",
+          "label": "Accent 1"
+        },
+        {
+          "value": "accent-2",
+          "label": "Accent 2"
+        },
+        {
+          "value": "background-1",
+          "label": "Background 1"
+        },
+        {
+          "value": "background-2",
+          "label": "Background 2"
+        }
+      ],
+      "default": "background-2",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Guarantee Badge"
+    },
+    {
+      "type": "text",
+      "id": "badge_icon",
+      "default": "🛡️",
+      "label": "Badge icon"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "default": "100% Satisfaction Guaranteed",
+      "label": "Badge text"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Shop With Complete Confidence",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "default": "<p>We stand behind every product we sell with industry-leading guarantees. If you're not 100% satisfied, we'll make it right - no questions asked.</p>",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "default": true,
+      "label": "Show call to action"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "default": "Start Shopping Risk-Free",
+      "label": "Button text"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "cta_subtext",
+      "default": "Join 50,000+ happy customers",
+      "label": "Subtext below button"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "guarantee_feature",
+      "name": "Guarantee Feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "default": "✓",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "default": "7-Day Free Returns",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "default": "Not happy? Return it within 7 days for a full refund, no questions asked.",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Guarantee Section",
+      "blocks": [
+        {
+          "type": "guarantee_feature",
+          "settings": {
+            "icon": "↩️",
+            "title": "7-Day Free Returns",
+            "description": "Changed your mind? Return any item within 7 days for a full refund. No restocking fees, no hassles."
+          }
+        },
+        {
+          "type": "guarantee_feature",
+          "settings": {
+            "icon": "🔒",
+            "title": "Secure Checkout",
+            "description": "Your payment information is encrypted with 256-bit SSL security. Shop with confidence."
+          }
+        },
+        {
+          "type": "guarantee_feature",
+          "settings": {
+            "icon": "🚚",
+            "title": "Free Shipping $75+",
+            "description": "Get free shipping on all orders over $75. Most orders arrive within 3-5 business days."
+          }
+        },
+        {
+          "type": "guarantee_feature",
+          "settings": {
+            "icon": "💯",
+            "title": "Quality Guaranteed",
+            "description": "Every jacket is rigorously tested for quality and durability. If there's a defect, we'll replace it free."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

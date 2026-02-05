@@ -2,6 +2,10 @@
 {{ 'component-totals.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
+{{ 'component-checkout-optimization.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'checkout-accelerator.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'quick-checkout-widget.js' | asset_url }}" defer="defer"></script>
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -105,22 +109,85 @@
               </div>
             {%- else -%}
               <div class="cart__ctas" {{ block.shopify_attributes }}>
+                <!-- Trust Signals -->
+                <div class="checkout-trust-signals" style="margin-bottom: 16px; padding: 16px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px;">
+                  <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; font-size: 13px; color: #166534;">
+                    <span style="display: flex; align-items: center; gap: 4px;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="M9 12l2 2 4-4"/>
+                      </svg>
+                      <strong>Secure Checkout</strong>
+                    </span>
+                    <span style="display: flex; align-items: center; gap: 4px;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                      </svg>
+                      Free Shipping
+                    </span>
+                    <span style="display: flex; align-items: center; gap: 4px;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="16 12 12 8 8 12"/>
+                        <line x1="12" y1="16" x2="12" y2="8"/>
+                      </svg>
+                      Easy Returns
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Main Checkout Button -->
                 <button
                   type="submit"
                   id="checkout"
-                  class="cart__checkout-button button"
+                  class="cart__checkout-button button checkout-btn-enhanced"
                   name="checkout"
                   {% if cart == empty %}
                     disabled
                   {% endif %}
                   form="cart"
+                  style="position: relative; overflow: hidden; font-size: 16px; font-weight: 700; padding: 18px 32px; border-radius: 12px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; color: white; width: 100%; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); transition: all 0.3s ease; cursor: pointer;"
+                  onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(16, 185, 129, 0.5)';"
+                  onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(16, 185, 129, 0.4)';"
                 >
-                  {{ 'sections.cart.checkout' | t }}
+                  <span style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                      <line x1="1" y1="10" x2="23" y2="10"/>
+                    </svg>
+                    {{ 'sections.cart.checkout' | t }}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </span>
                 </button>
+
+                <!-- Urgency Timer -->
+                <div class="checkout-urgency" style="margin-top: 12px; text-align: center; padding: 12px; background: #fef3c7; border-radius: 8px; border: 1px solid #fbbf24;">
+                  <div style="font-size: 13px; color: #92400e; font-weight: 600;">
+                    🔥 <span id="checkout-timer">10:00</span> to complete checkout for guaranteed shipping today!
+                  </div>
+                </div>
+
+                <!-- Security Badges -->
+                <div class="payment-security" style="margin-top: 16px; text-align: center; padding: 12px; border-top: 1px solid #e5e7eb;">
+                  <div style="font-size: 11px; color: #6b7280; margin-bottom: 8px; font-weight: 600;">SECURE PAYMENT</div>
+                  <div style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; opacity: 0.7;">
+                    <img src="https://cdn.shopify.com/s/files/1/0070/7032/files/ssl-badge.png?v=1" alt="SSL" style="height: 24px;" loading="lazy">
+                    <img src="https://cdn.shopify.com/s/files/1/0070/7032/files/visa.png?v=1" alt="Visa" style="height: 18px;" loading="lazy">
+                    <img src="https://cdn.shopify.com/s/files/1/0070/7032/files/mastercard.png?v=1" alt="Mastercard" style="height: 18px;" loading="lazy">
+                    <img src="https://cdn.shopify.com/s/files/1/0070/7032/files/amex.png?v=1" alt="Amex" style="height: 18px;" loading="lazy">
+                    <img src="https://cdn.shopify.com/s/files/1/0070/7032/files/paypal.png?v=1" alt="PayPal" style="height: 18px;" loading="lazy">
+                  </div>
+                </div>
               </div>
 
               {%- if additional_checkout_buttons -%}
-                <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
+                <div class=\"cart__dynamic-checkout-buttons additional-checkout-buttons\" style=\"margin-top: 16px;\">
+                  <div style=\"text-align: center; margin-bottom: 12px; font-size: 13px; color: #6b7280; font-weight: 600;\">
+                    EXPRESS CHECKOUT
+                  </div>
                   {{ content_for_additional_checkout_buttons }}
                 </div>
               {%- endif -%}
@@ -132,6 +199,57 @@
     </div>
   </div>
 </div>
+
+<script>
+// Checkout urgency timer
+(function() {
+  const timerEl = document.getElementById('checkout-timer');
+  if (!timerEl) return;
+  
+  let timeLeft = 600; // 10 minutes
+  
+  function updateTimer() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    timerEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    
+    if (timeLeft > 0) {
+      timeLeft--;
+    } else {
+      timerEl.textContent = 'Time expired';
+    }
+  }
+  
+  updateTimer();
+  setInterval(updateTimer, 1000);
+})();
+
+// Make checkout button sticky on mobile
+window.addEventListener('scroll', function() {
+  const checkoutBtn = document.querySelector('.cart__checkout-button');
+  const footer = document.querySelector('.cart__footer');
+  
+  if (!checkoutBtn || !footer) return;
+  
+  if (window.innerWidth < 768) {
+    const footerRect = footer.getBoundingClientRect();
+    if (footerRect.top > window.innerHeight) {
+      checkoutBtn.style.position = 'fixed';
+      checkoutBtn.style.bottom = '20px';
+      checkoutBtn.style.left = '20px';
+      checkoutBtn.style.right = '20px';
+      checkoutBtn.style.zIndex = '1000';
+      checkoutBtn.style.width = 'calc(100% - 40px)';
+    } else {
+      checkoutBtn.style.position = 'relative';
+      checkoutBtn.style.bottom = 'auto';
+      checkoutBtn.style.left = 'auto';
+      checkoutBtn.style.right = 'auto';
+      checkoutBtn.style.width = '100%';
+    }
+  }
+});
+</script>
 
 {% schema %}
 {
