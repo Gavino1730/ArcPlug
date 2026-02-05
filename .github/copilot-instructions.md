@@ -9,3 +9,5 @@
 - Implement changes directly in the codebase
 - Provide brief summaries in responses when needed
 - Use multi_replace_string_in_file for multiple independent edits
+
+Website is thearcplug.com
