@@ -13,8 +13,8 @@
 }
 
 .card-wrapper .rating-star {
-  --letter-spacing: 0.7;
-  --font-size: 1.4;
+  --letter-spacing: 0.62;
+  --font-size: 1.55;
 }
 
 .rating-star {
@@ -51,6 +51,7 @@
 .rating-count {
   display: inline-block;
   margin: 0;
+  color: rgba(var(--color-foreground), 0.72);
 }
 
 @media (forced-colors: active) {

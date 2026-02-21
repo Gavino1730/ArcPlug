@@ -2,53 +2,61 @@
   Social Proof Banner - Creates urgency and trust
 {% endcomment %}
 
-<style>
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
   .social-proof-banner {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: {{ section.settings.padding_top }}px 1.5rem {{ section.settings.padding_bottom }}px 1.5rem;
     text-align: center;
   }
 
   .social-proof-banner__content {
-    max-width: 1000px;
-    margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 3rem;
+    gap: 1.75rem;
   }
 
   .social-proof-stat {
     flex: 1;
-    min-width: 180px;
-    padding: 0 0.5rem;
+    min-width: 160px;
   }
 
   .social-proof-stat__number {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 700;
-    margin: 0 0 0.4rem 0;
+    margin: 0 0 0.25rem 0;
     line-height: 1;
+    color: rgb(var(--color-foreground));
   }
 
   .social-proof-stat__label {
-    font-size: 1.05rem;
+    font-size: 1rem;
     margin: 0;
-    opacity: 0.95;
     font-weight: 600;
+    line-height: 1.2;
+    color: rgba(var(--color-foreground), 0.78);
   }
 
   .social-proof-banner__divider {
     width: 1px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.3);
+    height: 46px;
+    background: rgba(var(--color-foreground), 0.18);
   }
 
   @media screen and (max-width: 749px) {
     .social-proof-banner__content {
-      gap: 2rem;
+      gap: 1.2rem;
     }
 
     .social-proof-stat {
@@ -56,7 +64,7 @@
     }
 
     .social-proof-stat__number {
-      font-size: 2rem;
+      font-size: 1.7rem;
     }
 
     .social-proof-stat__label {
@@ -67,19 +75,21 @@
       display: none;
     }
   }
-</style>
+{%- endstyle -%}
 
-<div class="social-proof-banner">
-  <div class="social-proof-banner__content">
-    {% for block in section.blocks %}
-      {% if forloop.index > 1 %}
-        <div class="social-proof-banner__divider"></div>
-      {% endif %}
-      <div class="social-proof-stat" {{ block.shopify_attributes }}>
-        <p class="social-proof-stat__number">{{ block.settings.number }}</p>
-        <p class="social-proof-stat__label">{{ block.settings.label }}</p>
-      </div>
-    {% endfor %}
+<div class="social-proof-banner color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
+    <div class="social-proof-banner__content">
+      {% for block in section.blocks %}
+        {% if forloop.index > 1 %}
+          <div class="social-proof-banner__divider" aria-hidden="true"></div>
+        {% endif %}
+        <div class="social-proof-stat" {{ block.shopify_attributes }}>
+          <p class="social-proof-stat__number">{{ block.settings.number }}</p>
+          <p class="social-proof-stat__label">{{ block.settings.label }}</p>
+        </div>
+      {% endfor %}
+    </div>
   </div>
 </div>
 
@@ -90,6 +100,12 @@
   "class": "section",
   "settings": [
     {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
       "type": "range",
       "id": "padding_top",
       "min": 0,
@@ -97,7 +113,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Top",
-      "default": 28
+      "default": 20
     },
     {
       "type": "range",
@@ -107,7 +123,7 @@
       "step": 4,
       "unit": "px",
       "label": "Padding Bottom",
-      "default": 28
+      "default": 20
     }
   ],
   "blocks": [

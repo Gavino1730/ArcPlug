@@ -1,32 +1,32 @@
 <style>
   .email-signup {
-    padding: 32px 2rem 28px 2rem;
+    padding: 14px 1.6rem 14px 1.6rem;
     text-align: center;
   }
 
   .email-signup__wrapper {
-    max-width: 700px;
+    max-width: 860px;
     margin: 0 auto;
   }
 
   .email-signup__heading {
     font-size: 1.75rem;
     font-weight: 600;
-    margin: 0 0 0.875rem 0;
+    margin: 0 0 0.65rem 0;
     color: rgba(var(--color-foreground), 0.9);
     border-bottom: 1px solid rgba(var(--color-foreground), 0.15);
-    padding-bottom: 16px;
+    padding-bottom: 12px;
   }
 
   .email-signup__description {
     font-size: 1rem;
     color: rgba(var(--color-foreground), 0.7);
-    margin: 0 0 1.5rem 0;
+    margin: 0 0 0.8rem 0;
   }
 
   .email-signup__form {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.6rem;
     flex-wrap: nowrap;
     justify-content: center;
     align-items: stretch;
@@ -34,8 +34,9 @@
 
   .email-signup__input {
     flex: 1;
-    min-width: 300px;
-    max-width: 400px;
+    min-width: 460px;
+    max-width: 640px;
+    min-height: 5.2rem;
     padding: 1rem 1.25rem;
     border: 1px solid rgba(var(--color-foreground), 0.2);
     border-radius: var(--inputs-radius, 0);
@@ -49,7 +50,8 @@
   }
 
   .email-signup__button {
-    padding: 1rem 2.5rem;
+    min-height: 5.2rem;
+    padding: 1rem 2.3rem;
     background-color: rgb(var(--color-button));
     color: rgb(var(--color-button-text));
     border: none;
@@ -65,7 +67,7 @@
 
   @media screen and (max-width: 749px) {
     .email-signup {
-      padding: 10px 1rem;
+      padding: 10px 1rem 12px;
     }
 
     .email-signup__heading {
@@ -85,17 +87,20 @@
     }
 
     .email-signup__input {
-      width: 90%;
+      width: 100%;
       margin: 0 auto;
       padding: 0.75rem 0.75rem;
       font-size: 0.95rem;
+      min-height: 4.6rem;
+      min-width: 0;
     }
 
     .email-signup__button {
-      width: 90%;
+      width: 100%;
       margin: 0 auto;
       padding: 0.75rem 1.5rem;
       font-size: 0.95rem;
+      min-height: 4.6rem;
     }
   }
 </style>

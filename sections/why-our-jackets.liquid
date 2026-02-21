@@ -1,23 +1,28 @@
-<style>
-  .why-our-jackets {
-    padding: {{ section.settings.padding_top }}px 2rem {{ section.settings.padding_bottom }}px 2rem;
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
   }
 
   .why-our-jackets__title {
     text-align: center;
     font-size: 2rem;
     font-weight: 600;
-    margin: 0 0 2.5rem 0;
+    margin: 0 0 1.4rem 0;
     color: rgba(var(--color-foreground), 0.9);
-    padding-bottom: 1rem;
-    border-bottom: 1px solid rgba(var(--color-foreground), 0.2);
   }
 
   .why-our-jackets__wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 3rem;
-    max-width: 1150px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
     margin: 0 auto;
   }
 
@@ -29,13 +34,13 @@
   }
 
   .feature-item__icon {
-    width: 3rem;
-    height: 3rem;
-    font-size: 2rem;
+    width: 3.9rem;
+    height: 3.9rem;
+    font-size: 2.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 0.875rem;
+    margin-bottom: 0.65rem;
   }
 
   .feature-item__title {
@@ -49,7 +54,7 @@
     font-size: 0.95rem;
     color: rgba(var(--color-foreground), 0.7);
     margin: 0;
-    line-height: 1.5;
+    line-height: 1.28;
   }
 
   @media screen and (max-width: 749px) {
@@ -62,10 +67,10 @@
       font-size: 1.5rem;
     }
   }
-</style>
+{%- endstyle -%}
 
-<div class="why-our-jackets color-{{ section.settings.color_scheme }} gradient">
-  <div>
+<div class="why-our-jackets color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
     {% if section.settings.title != blank %}
       <h2 class="why-our-jackets__title">{{ section.settings.title }}</h2>
     {% endif %}

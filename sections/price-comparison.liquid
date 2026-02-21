@@ -2,10 +2,21 @@
   Price Comparison Section
 {% endcomment %}
 
-<style>
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
   .price-comparison {
-    padding: {{ section.settings.padding_top }}px 2rem {{ section.settings.padding_bottom }}px 2rem;
-    background: linear-gradient(to bottom, rgba(var(--color-background), 1), rgba(var(--color-background), 0.97));
+    text-align: center;
   }
 
   .price-comparison__title {
@@ -20,45 +31,37 @@
     text-align: center;
     font-size: 1.1rem;
     color: rgba(var(--color-foreground), 0.7);
-    margin: 0 0 3rem 0;
+    margin: 0 0 1.8rem 0;
   }
 
   .comparison-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    max-width: 1100px;
-    margin: 0 auto;
+    gap: 1.25rem;
+    margin: 0;
+    align-items: stretch;
   }
 
   .comparison-card {
-    background: white;
-    border-radius: 16px;
-    padding: 1.5rem 1.75rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    background: rgb(var(--color-background));
+    border-radius: 12px;
+    padding: 1.2rem 1.2rem;
+    border: 1px solid rgba(var(--color-foreground), 0.12);
     text-align: center;
     position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.2s ease, border-color 0.2s ease;
     display: flex;
     flex-direction: column;
   }
 
   .comparison-card--featured {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    transform: scale(1.05);
-    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
-  }
-
-  .comparison-card--featured .comparison-card__price,
-  .comparison-card--featured .comparison-card__brand,
-  .comparison-card--featured .comparison-card__features {
-    color: white;
+    border-color: rgba(var(--color-foreground), 0.24);
+    background: rgba(var(--color-foreground), 0.03);
   }
 
   .comparison-card:hover:not(.comparison-card--featured) {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+    border-color: rgba(var(--color-foreground), 0.2);
   }
 
   .comparison-card__badge {
@@ -66,9 +69,9 @@
     top: -12px;
     left: 50%;
     transform: translateX(-50%);
-    background: #10b981;
-    color: white;
-    padding: 0.4rem 1rem;
+    background: rgb(var(--color-button));
+    color: rgb(var(--color-button-text));
+    padding: 0.35rem 0.9rem;
     border-radius: 20px;
     font-size: 0.75rem;
     font-weight: 700;
@@ -80,40 +83,36 @@
     font-size: 1.3rem;
     font-weight: 600;
     margin: 0.5rem 0 1rem 0;
-    color: rgba(18, 18, 18, 0.9);
+    color: rgba(var(--color-foreground), 0.9);
   }
 
   .comparison-card__price {
     font-size: 2.75rem;
     font-weight: 700;
     margin: 0.75rem 0;
-    color: rgba(18, 18, 18, 0.95);
+    color: rgba(var(--color-foreground), 0.95);
     line-height: 1;
   }
 
   .comparison-card__price-label {
     font-size: 0.875rem;
     opacity: 0.75;
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.9rem;
   }
 
   .comparison-card__features {
     list-style: none;
     padding: 0;
-    margin: 1.5rem 0 0 0;
+    margin: 0.8rem 0 0 0;
     text-align: left;
   }
 
   .comparison-card__features li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 0.42rem 0;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
     font-size: 0.95rem;
-    color: rgba(18, 18, 18, 0.8);
-    line-height: 1.4;
-  }
-
-  .comparison-card--featured .comparison-card__features li {
-    border-bottom-color: rgba(255, 255, 255, 0.2);
+    color: rgba(var(--color-foreground), 0.78);
+    line-height: 1.3;
   }
 
   .comparison-card__features li:last-child {
@@ -122,50 +121,29 @@
 
   .comparison-card__features li::before {
     content: "✓";
-    color: #10b981;
+    color: rgb(var(--color-button));
     font-weight: bold;
     margin-right: 0.5rem;
   }
 
-  .comparison-card--featured .comparison-card__features li::before {
-    color: #fbbf24;
-  }
-
   .comparison-card__button {
     margin-top: auto;
-    padding-top: 1.25rem;
-    display: inline-block;
-    padding: 0.875rem 2rem;
-    background: rgba(18, 18, 18, 0.9);
-    color: white;
-    text-decoration: none;
-    border-radius: 40px;
-    font-weight: 600;
-    transition: all 0.3s ease;
+    width: 100%;
+    display: flex;
+    justify-content: center;
   }
 
-  .comparison-card__button:hover {
-    background: rgba(18, 18, 18, 1);
-    transform: scale(1.05);
-  }
-
-  .comparison-card--featured .comparison-card__button {
-    background: white;
-    color: #667eea;
-  }
-
-  .comparison-card--featured .comparison-card__button:hover {
-    background: #f9fafb;
+  .comparison-card__button .button {
+    width: 100%;
   }
 
   @media screen and (max-width: 989px) {
     .comparison-grid {
       grid-template-columns: 1fr;
-      gap: 2.5rem;
+      gap: 1.25rem;
     }
 
     .comparison-card--featured {
-      transform: scale(1);
       order: -1;
     }
 
@@ -173,10 +151,10 @@
       font-size: 1.75rem;
     }
   }
-</style>
+{%- endstyle -%}
 
-<div class="price-comparison color-{{ section.settings.color_scheme }} gradient">
-  <div>
+<div class="price-comparison color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
     {% if section.settings.title != blank %}
       <h2 class="price-comparison__title">{{ section.settings.title }}</h2>
     {% endif %}
@@ -205,9 +183,11 @@
           {% endif %}
 
           {% if block.settings.button_text != blank and block.settings.button_link != blank %}
-            <a href="{{ block.settings.button_link }}" class="comparison-card__button">
-              {{ block.settings.button_text }}
-            </a>
+            <div class="comparison-card__button">
+              <a href="{{ block.settings.button_link }}" class="button button--primary">
+                {{ block.settings.button_text }}
+              </a>
+            </div>
           {% endif %}
         </div>
       {% endfor %}

@@ -5,21 +5,31 @@
 <style>
   .slideshow .banner__buttons .button {
     font-weight: 700;
-    font-size: 1.3rem;
-    padding: 1.4rem 3rem;
+    font-size: 1.45rem;
+    padding: 1.75rem 3.4rem;
     letter-spacing: 0.05em;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    min-height: 5.6rem;
   }
 
   .slideshow .banner__content h2 + .banner__text {
-    font-size: 1.4rem;
+    font-size: 1.55rem;
     font-weight: 600;
     line-height: 1.4;
   }
 
+  .slideshow:not(.banner--mobile-bottom) .slideshow__text-wrapper.banner__content {
+    transform: translateY(calc(7% + 50px));
+  }
+
+  .slideshow .banner__media img {
+    object-position: 24% 24%;
+    transform: scale(1.16);
+  }
+
   @media screen and (max-width: 749px) {
     .slideshow:not(.banner--mobile-bottom) .slideshow__text-wrapper {
-      padding: 2rem 1.5rem;
+      padding: 1.5rem 1.25rem;
     }
 
     .slideshow:not(.banner--mobile-bottom) .slideshow__text {
@@ -27,12 +37,22 @@
     }
 
     .slideshow:not(.banner--mobile-bottom) .slideshow__text .button {
-      padding: 1.1rem 2.2rem;
-      font-size: 1.05rem;
+      padding: 1.2rem 2.3rem;
+      font-size: 1.1rem;
+      min-height: 5rem;
     }
 
     .slideshow .banner__content h2 + .banner__text {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
+    }
+
+    .slideshow:not(.banner--mobile-bottom) .slideshow__text-wrapper.banner__content {
+      transform: translateY(calc(4% + 18px));
+    }
+
+    .slideshow .banner__media img {
+      object-position: 30% 24%;
+      transform: scale(1.12);
     }
   }
 </style>

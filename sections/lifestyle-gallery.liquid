@@ -1,14 +1,19 @@
-<style>
-  .lifestyle-gallery {
-    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px 0;
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
   }
 
   .lifestyle-gallery__header {
     text-align: center;
-    margin-bottom: 24px;
-    padding: 0 2rem;
-    border-bottom: 1px solid rgba(var(--color-foreground), 0.15);
-    padding-bottom: 16px;
+    margin-bottom: 1.25rem;
   }
 
   .lifestyle-gallery__title {
@@ -20,19 +25,17 @@
 
   .lifestyle-gallery__images {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat({{ section.settings.columns }}, 1fr);
+    gap: {{ section.settings.gap }}px;
     width: 100%;
-    max-width: 1400px;
-    padding: 0 2rem;
-    margin: 0 auto;
+    margin: 0;
   }
 
   .lifestyle-gallery__image {
     position: relative;
     overflow: hidden;
     width: 100%;
-    height: 420px;
+    height: {{ section.settings.image_height }}px;
     border-radius: 8px;
   }
 
@@ -60,7 +63,7 @@
   .lifestyle-gallery__button {
     display: block;
     text-align: center;
-    margin-top: 2.5rem;
+    margin-top: 2.6rem;
   }
 
   .lifestyle-gallery__button .button {
@@ -68,14 +71,8 @@
   }
 
   @media screen and (max-width: 749px) {
-    .lifestyle-gallery {
-      padding-top: 20px;
-      padding-bottom: 20px;
-    }
-
     .lifestyle-gallery__header {
       margin-bottom: 1rem;
-      padding: 0 1rem;
     }
 
     .lifestyle-gallery__images {
@@ -91,39 +88,42 @@
       font-size: 2rem;
       font-weight: 700;
       margin-bottom: 0;
-      padding-bottom: 10px;
     }
 
     .lifestyle-gallery__button {
       margin-top: 1rem;
     }
   }
-</style>
+{%- endstyle -%}
 
-<div class="lifestyle-gallery color-{{ section.settings.color_scheme }} gradient">
+<div class="lifestyle-gallery color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
   {% if section.settings.show_title %}
-    <div class="lifestyle-gallery__header">
-      <h2 class="lifestyle-gallery__title">{{ section.settings.title }}</h2>
+    <div class="page-width">
+      <div class="lifestyle-gallery__header">
+        <h2 class="lifestyle-gallery__title">{{ section.settings.title }}</h2>
+      </div>
     </div>
   {% endif %}
 
-  <div class="lifestyle-gallery__images">
-    {% for block in section.blocks %}
-      {% if block.settings.image != blank %}
-        <div class="lifestyle-gallery__image" {{ block.shopify_attributes }}>
-          {{ block.settings.image | image_url: width: 800 | image_tag: alt: block.settings.image.alt, loading: 'lazy' }}
-        </div>
-      {% endif %}
-    {% endfor %}
+  <div class="page-width">
+    <div class="lifestyle-gallery__images">
+      {% for block in section.blocks %}
+        {% if block.settings.image != blank %}
+          <div class="lifestyle-gallery__image" {{ block.shopify_attributes }}>
+            {{ block.settings.image | image_url: width: 800 | image_tag: alt: block.settings.image.alt, loading: 'lazy' }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if section.settings.show_gallery_button %}
+      <div class="lifestyle-gallery__button">
+        <a href="{{ section.settings.gallery_button_link }}" class="button button--secondary">
+          {{ section.settings.gallery_button_text }}
+        </a>
+      </div>
+    {% endif %}
   </div>
-
-  {% if section.settings.show_gallery_button %}
-    <div class="lifestyle-gallery__button">
-      <a href="{{ section.settings.gallery_button_link }}" class="button button--secondary">
-        {{ section.settings.gallery_button_text }}
-      </a>
-    </div>
-  {% endif %}
 </div>
 
 {% schema %}
