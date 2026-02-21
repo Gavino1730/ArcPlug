@@ -1,0 +1,351 @@
+{% comment %}
+  Price Comparison Section
+{% endcomment %}
+
+<style>
+  .price-comparison {
+    padding: {{ section.settings.padding_top }}px 2rem {{ section.settings.padding_bottom }}px 2rem;
+    background: linear-gradient(to bottom, rgba(var(--color-background), 1), rgba(var(--color-background), 0.97));
+  }
+
+  .price-comparison__title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+    color: rgba(var(--color-foreground), 0.9);
+  }
+
+  .price-comparison__subtitle {
+    text-align: center;
+    font-size: 1.1rem;
+    color: rgba(var(--color-foreground), 0.7);
+    margin: 0 0 3rem 0;
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .comparison-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .comparison-card--featured {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+  }
+
+  .comparison-card--featured .comparison-card__price,
+  .comparison-card--featured .comparison-card__brand,
+  .comparison-card--featured .comparison-card__features {
+    color: white;
+  }
+
+  .comparison-card:hover:not(.comparison-card--featured) {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .comparison-card__badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #10b981;
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .comparison-card__brand {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0.5rem 0 1rem 0;
+    color: rgba(18, 18, 18, 0.9);
+  }
+
+  .comparison-card__price {
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 1rem 0;
+    color: rgba(18, 18, 18, 0.95);
+  }
+
+  .comparison-card__price-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .comparison-card__features {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0 0;
+    text-align: left;
+  }
+
+  .comparison-card__features li {
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    font-size: 0.95rem;
+    color: rgba(18, 18, 18, 0.8);
+  }
+
+  .comparison-card--featured .comparison-card__features li {
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .comparison-card__features li:last-child {
+    border-bottom: none;
+  }
+
+  .comparison-card__features li::before {
+    content: "✓";
+    color: #10b981;
+    font-weight: bold;
+    margin-right: 0.5rem;
+  }
+
+  .comparison-card--featured .comparison-card__features li::before {
+    color: #fbbf24;
+  }
+
+  .comparison-card__button {
+    margin-top: 1.5rem;
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    background: rgba(18, 18, 18, 0.9);
+    color: white;
+    text-decoration: none;
+    border-radius: 40px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .comparison-card__button:hover {
+    background: rgba(18, 18, 18, 1);
+    transform: scale(1.05);
+  }
+
+  .comparison-card--featured .comparison-card__button {
+    background: white;
+    color: #667eea;
+  }
+
+  .comparison-card--featured .comparison-card__button:hover {
+    background: #f9fafb;
+  }
+
+  @media screen and (max-width: 989px) {
+    .comparison-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    .comparison-card--featured {
+      transform: scale(1);
+      order: -1;
+    }
+
+    .price-comparison__title {
+      font-size: 1.75rem;
+    }
+  }
+</style>
+
+<div class="price-comparison color-{{ section.settings.color_scheme }} gradient">
+  <div>
+    {% if section.settings.title != blank %}
+      <h2 class="price-comparison__title">{{ section.settings.title }}</h2>
+    {% endif %}
+    {% if section.settings.subtitle != blank %}
+      <p class="price-comparison__subtitle">{{ section.settings.subtitle }}</p>
+    {% endif %}
+
+    <div class="comparison-grid">
+      {% for block in section.blocks %}
+        <div class="comparison-card {% if block.settings.featured %}comparison-card--featured{% endif %}" {{ block.shopify_attributes }}>
+          {% if block.settings.badge != blank %}
+            <div class="comparison-card__badge">{{ block.settings.badge }}</div>
+          {% endif %}
+          
+          <h3 class="comparison-card__brand">{{ block.settings.brand_name }}</h3>
+          <div class="comparison-card__price">{{ block.settings.price }}</div>
+          <p class="comparison-card__price-label">{{ block.settings.price_label }}</p>
+          
+          {% if block.settings.features != blank %}
+            <ul class="comparison-card__features">
+              {% assign features_list = block.settings.features | split: '|' %}
+              {% for feature in features_list %}
+                <li>{{ feature }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+          {% if block.settings.button_text != blank and block.settings.button_link != blank %}
+            <a href="{{ block.settings.button_link }}" class="comparison-card__button">
+              {{ block.settings.button_text }}
+            </a>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Price Comparison",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Why Pay More?"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Compare and see the difference"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 52
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Brand",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "brand_name",
+          "label": "Brand Name",
+          "default": "Brand"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Price",
+          "default": "$499"
+        },
+        {
+          "type": "text",
+          "id": "price_label",
+          "label": "Price Label",
+          "default": "Starting price"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge Text"
+        },
+        {
+          "type": "checkbox",
+          "id": "featured",
+          "label": "Featured Card",
+          "default": false
+        },
+        {
+          "type": "textarea",
+          "id": "features",
+          "label": "Features (separate with |)",
+          "default": "Premium materials|Water resistant|Lifetime warranty"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Price Comparison",
+      "blocks": [
+        {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Arc'teryx",
+            "price": "$500+",
+            "price_label": "Retail price",
+            "features": "Premium materials|Retail markup|Limited colors|Brand prestige"
+          }
+        },
+        {
+          "type": "brand",
+          "settings": {
+            "brand_name": "The Arc Plug",
+            "price": "$149.99",
+            "price_label": "Direct to consumer",
+            "badge": "Best Value",
+            "featured": true,
+            "features": "Same quality materials|No retail markup|11 colors available|4.64★ rating",
+            "button_text": "Shop Now",
+            "button_link": "/collections/all"
+          }
+        },
+        {
+          "type": "brand",
+          "settings": {
+            "brand_name": "North Face",
+            "price": "$350+",
+            "price_label": "Retail price",
+            "features": "Good materials|Retail markup|Limited selection|Brand name"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

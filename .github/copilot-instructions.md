@@ -10,19 +10,19 @@ ALWAYS FIX ERRORS AND BUGS IN THE CODE.
 ### Products
 - Premium outdoor jackets (Arc'teryx alternative)
 - Colors: Black, Purple, White, Light Pink, Blue, Dark Red, Grey, Orange, Neon Yellow, Light Blue, Red
-- Pricing: Regular $250 → Sale $149.99 (40% discount)
+- Pricing: All jackets $149.99
 - Average rating: 4.64★ (117+ reviews)
 
 ### Brand Positioning
 - Affordable alternative to Arc'teryx and North Face
-- Direct-to-consumer model = 40-60% savings
+- Direct-to-consumer model = better pricing without retail markup
 - Target: Outdoor enthusiasts, skiers, cyclists, hikers
 - Customer quote: "better than my north face shell honestly"
 
 ### Key Features
-- ✈️ Fast US Shipping (3-4 days typical)
+- 🌍 Worldwide Shipping (processed 4-7 days, delivery 14-30 days)
 - ✓ Weather Tested (water/wind resistant)
-- ↻ Free 7-Day Returns
+- ↻ 14-Day Returns (domestic only, international final sale)
 - 🔒 Secure Checkout
 - Ambassador program ($40+ per sale)
 
@@ -31,7 +31,7 @@ ALWAYS FIX ERRORS AND BUGS IN THE CODE.
 - Good fit for layering
 - Strong water/wind resistance
 - Better value than North Face competitors
-- Fast shipping appreciated
+- Quality over speed appreciated
 
 ## Documentation Policy
 - Do NOT create guide, overview, or documentation markdown files when making improvements or changes

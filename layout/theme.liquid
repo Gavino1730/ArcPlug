@@ -56,17 +56,15 @@
     }
     </script>
 
-    {%- comment -%} Performance preconnects - early connection establishment {%- endcomment -%}
+    {%- comment -%} Performance preconnects {%- endcomment -%}
     <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
-    <link rel="dns-prefetch" href="https://monorail-edge.shopifysvc.com">
 
-    {%- comment -%} Critical scripts with proper preload {%- endcomment -%}
-    <link rel="preload" href="{{ 'constants.js' | asset_url }}" as="script">
-    <link rel="preload" href="{{ 'global.js' | asset_url }}" as="script">
-    
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
 
     {%- if settings.animations_reveal_on_scroll -%}
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
@@ -79,13 +77,6 @@
       assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
       assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
     %}
-
-    {%- unless settings.type_body_font.system? -%}
-      <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
-    {%- endunless -%}
-    {%- unless settings.type_header_font.system? -%}
-      <link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
-    {%- endunless -%}
 
     {% style %}
       {{ settings.type_body_font | font_face: font_display: 'swap' }}
@@ -296,27 +287,30 @@
       }
     {% endstyle %}
 
-    <link rel="preload" href="{{ 'base.css' | asset_url }}" as="style">
     {{ 'base.css' | asset_url | stylesheet_tag }}
-    <link rel="stylesheet" href="{{ 'enhanced-components.css' | asset_url }}" media="print" onload="this.media='all'">
-    
-    {%- comment -%} Home page conversion optimization styles {%- endcomment -%}
-    {%- if template.name == 'index' -%}
-      <link rel="stylesheet" href="{{ 'home-page-conversion.css' | asset_url }}" media="print" onload="this.media='all'">
-    {%- endif -%}
+    <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
     {%- if settings.cart_type == 'drawer' -%}
-      <link rel="stylesheet" href="{{ 'component-cart-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
-      <link rel="stylesheet" href="{{ 'component-cart.css' | asset_url }}" media="print" onload="this.media='all'">
-      <link rel="stylesheet" href="{{ 'component-totals.css' | asset_url }}" media="print" onload="this.media='all'">
-      <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
-      <link rel="stylesheet" href="{{ 'component-discounts.css' | asset_url }}" media="print" onload="this.media='all'">
-    {%- else -%}
-      <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
+      {{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
+      {{ 'component-cart.css' | asset_url | stylesheet_tag }}
+      {{ 'component-totals.css' | asset_url | stylesheet_tag }}
+      {{ 'component-price.css' | asset_url | stylesheet_tag }}
+      {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
     {%- endif -%}
 
+    {%- unless settings.type_body_font.system? -%}
+      {% comment %}theme-check-disable AssetPreload{% endcomment %}
+      <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
+      {% comment %}theme-check-enable AssetPreload{% endcomment %}
+    {%- endunless -%}
+    {%- unless settings.type_header_font.system? -%}
+      {% comment %}theme-check-disable AssetPreload{% endcomment %}
+      <link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
+      {% comment %}theme-check-enable AssetPreload{% endcomment %}
+    {%- endunless -%}
+
     {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
-      <link rel="stylesheet" href="{{ 'component-localization-form.css' | asset_url }}" media="print" onload="this.media='all'">
+      {{ 'component-localization-form.css' | asset_url | stylesheet_tag: preload: true }}
       <script src="{{ 'localization-form.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
@@ -410,31 +404,6 @@
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
-  {%- comment -%} Load only essential features asynchronously after critical content {%- endcomment -%}
-  <script>
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        const scripts = [
-          "{{ 'performance-optimizer.js' | asset_url }}",
-          "{{ 'conversion-optimizer.js' | asset_url }}",
-          "{{ 'sales-maximizer.js' | asset_url }}"
-        ];
-        
-        // Add home page conversion script for index template
-        {% if template.name == 'index' %}
-          scripts.push("{{ 'home-page-conversion.js' | asset_url }}");
-        {% endif %}
-        ];
-        scripts.forEach(src => {
-          const script = document.createElement('script');
-          script.src = src;
-          script.async = true;
-          document.body.appendChild(script);
-        });
-      }, 1000);
-    });
-  </script>
-  
-
+  <script src="{{ 'tiny-img-link-preloader.js' | asset_url }}" defer></script>
 </body>
 </html>

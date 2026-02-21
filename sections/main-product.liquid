@@ -15,7 +15,6 @@
   {{ 'component-slider.css' | asset_url | stylesheet_tag }}
   {{ 'component-rating.css' | asset_url | stylesheet_tag }}
   {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
-  {{ 'product-page-enhancements.css' | asset_url | stylesheet_tag }}
 
   {% unless product.has_only_default_variant %}
     {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
@@ -42,7 +41,6 @@
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'product-urgency.js' | asset_url }}" defer="defer"></script>
   {%- if product.quantity_price_breaks_configured? -%}
     <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
@@ -607,6 +605,7 @@
                                 <ul class="list-unstyled" role="list">
                                   {%- for product in recommendations.products
                                     limit: block.settings.products_per_page
+                                    offset: continue
                                   -%}
                                     <li>
                                       {%- if block.settings.enable_quick_add -%}
@@ -703,18 +702,10 @@
             {{- 'icon-arrow.svg' | inline_asset_content -}}
           </a>
         </section>
-        
-        {%- comment -%} Sales Optimization Features {%- endcomment -%}
-        {% render 'product-trust-badges' %}
-        {% render 'product-benefits' %}
-        {% render 'payment-trust-badges' %}
-        {% render 'product-guarantee' %}
-        {% render 'product-faq' %}
       </div>
     </div>
 
     {% render 'product-media-modal', variant_images: variant_images %}
-    {% render 'sticky-buy-bar', product: product %}
 
     {% assign popups = section.blocks | where: 'type', 'popup' %}
     {%- for block in popups -%}
@@ -753,6 +744,14 @@
       </script>
       <script src="{{ 'product-model.js' | asset_url }}" defer></script>
     {%- endif -%}
+
+    {%- liquid
+      if product.selected_or_first_available_variant.featured_media
+        assign seo_media = product.selected_or_first_available_variant.featured_media
+      else
+        assign seo_media = product.featured_media
+      endif
+    -%}
 
     <script type="application/ld+json">
       {{ product | structured_data }}

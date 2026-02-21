@@ -1,0 +1,170 @@
+{% comment %}
+  Social Proof Banner - Creates urgency and trust
+{% endcomment %}
+
+<style>
+  .social-proof-banner {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: {{ section.settings.padding_top }}px 1.5rem {{ section.settings.padding_bottom }}px 1.5rem;
+    text-align: center;
+  }
+
+  .social-proof-banner__content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  .social-proof-stat {
+    flex: 1;
+    min-width: 200px;
+    padding: 0 1rem;
+  }
+
+  .social-proof-stat__number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+    line-height: 1;
+  }
+
+  .social-proof-stat__label {
+    font-size: 1rem;
+    margin: 0;
+    opacity: 0.95;
+    font-weight: 500;
+  }
+
+  .social-proof-banner__divider {
+    width: 1px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  @media screen and (max-width: 749px) {
+    .social-proof-banner__content {
+      gap: 1.5rem;
+    }
+
+    .social-proof-stat {
+      min-width: 150px;
+    }
+
+    .social-proof-stat__number {
+      font-size: 2rem;
+    }
+
+    .social-proof-stat__label {
+      font-size: 0.875rem;
+    }
+
+    .social-proof-banner__divider {
+      display: none;
+    }
+  }
+</style>
+
+<div class="social-proof-banner">
+  <div class="social-proof-banner__content">
+    {% for block in section.blocks %}
+      {% if forloop.index > 1 %}
+        <div class="social-proof-banner__divider"></div>
+      {% endif %}
+      <div class="social-proof-stat" {{ block.shopify_attributes }}>
+        <p class="social-proof-stat__number">{{ block.settings.number }}</p>
+        <p class="social-proof-stat__label">{{ block.settings.label }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Social Proof Banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 28
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "default": "117+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Happy Customers"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social Proof Banner",
+      "blocks": [
+        {
+          "type": "stat",
+          "settings": {
+            "number": "117+",
+            "label": "Happy Customers"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "number": "4.64★",
+            "label": "Average Rating"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "number": "11",
+            "label": "Colors Available"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "number": "$149.99",
+            "label": "One Price"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

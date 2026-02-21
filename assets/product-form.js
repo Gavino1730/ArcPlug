@@ -27,9 +27,6 @@ if (!customElements.get('product-form')) {
         this.submitButton.classList.add('loading');
         this.querySelector('.loading__spinner').classList.remove('hidden');
 
-        // Add success feedback preparation
-        const originalButtonText = this.submitButtonText.innerHTML;
-
         const config = fetchConfig('javascript');
         config.headers['X-Requested-With'] = 'XMLHttpRequest';
         delete config.headers['Content-Type'];
@@ -68,15 +65,6 @@ if (!customElements.get('product-form')) {
               window.location = window.routes.cart_url;
               return;
             }
-
-            // Show success feedback
-            this.submitButtonText.innerHTML = '✓ Added to Cart!';
-            this.submitButton.style.background = '#10b981';
-            
-            setTimeout(() => {
-              this.submitButtonText.innerHTML = originalButtonText;
-              this.submitButton.style.background = '';
-            }, 2000);
 
             const startMarker = CartPerformance.createStartingMarker('add:wait-for-subscribers');
             if (!this.error)

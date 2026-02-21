@@ -1,367 +1,233 @@
 {% comment %}
-  Urgency Banner - Sticky Top Banner
-  Creates urgency with limited-time offers and countdown
+  Urgency Banner - Creates FOMO and drives conversions
 {% endcomment %}
-
-{%- if section.settings.enable_banner -%}
-<div 
-  class="urgency-banner color-{{ section.settings.color_scheme }} gradient{% if section.settings.sticky %} urgency-banner--sticky{% endif %}"
-  id="urgency-banner-{{ section.id }}"
-  data-section-id="{{ section.id }}"
->
-  <div class="urgency-banner__wrapper page-width">
-    <div class="urgency-banner__content">
-      {%- if section.settings.show_icon -%}
-        <span class="urgency-banner__icon">{{ section.settings.icon }}</span>
-      {%- endif -%}
-      
-      <div class="urgency-banner__text">
-        <strong>{{ section.settings.message }}</strong>
-      </div>
-
-      {%- if section.settings.show_countdown -%}
-        <div class="urgency-banner__countdown" data-countdown-type="{{ section.settings.countdown_type }}">
-          <span class="countdown-label">Ends in:</span>
-          <div class="countdown-timer">
-            <span class="countdown-value" data-hours>00</span>:
-            <span class="countdown-value" data-minutes>00</span>:
-            <span class="countdown-value" data-seconds>00</span>
-          </div>
-        </div>
-      {%- endif -%}
-
-      {%- if section.settings.button_text != blank -%}
-        <a href="{{ section.settings.button_link }}" class="urgency-banner__button button button--small">
-          {{ section.settings.button_text }}
-        </a>
-      {%- endif -%}
-    </div>
-
-    {%- if section.settings.dismissible -%}
-      <button 
-        class="urgency-banner__close" 
-        aria-label="Close banner"
-        onclick="this.closest('.urgency-banner').style.display='none'; sessionStorage.setItem('urgencyBannerDismissed-{{ section.id }}', 'true');"
-      >
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M1 1L13 13M1 13L13 1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </button>
-    {%- endif -%}
-  </div>
-</div>
 
 <style>
   .urgency-banner {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    padding: {{ section.settings.padding_top }}px 1.5rem {{ section.settings.padding_bottom }}px 1.5rem;
+    text-align: center;
     position: relative;
-    padding: 12px 0;
-    z-index: 100;
+    overflow: hidden;
   }
 
-  .urgency-banner--sticky {
-    position: sticky;
+  .urgency-banner::before {
+    content: '';
+    position: absolute;
     top: 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shine 3s infinite;
   }
 
-  .urgency-banner__wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  @keyframes shine {
+    0% { left: -100%; }
+    50%, 100% { left: 100%; }
   }
 
   .urgency-banner__content {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
   }
 
   .urgency-banner__icon {
-    font-size: 1.75rem;
-    line-height: 1;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  .urgency-banner__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
   .urgency-banner__text {
-    font-size: 1.125rem;
-    line-height: 1.4;
-    font-family: var(--font-body-family);
-    font-weight: 600;
-    letter-spacing: 0.02rem;
+    font-size: 1rem;
+    margin: 0 0 1rem 0;
+    opacity: 0.95;
   }
 
-  .urgency-banner__countdown {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  .urgency-banner__cta {
+    display: inline-block;
+    padding: 0.875rem 2.5rem;
+    background: white;
+    color: #dc2626;
+    text-decoration: none;
+    border-radius: 40px;
     font-weight: 700;
-    font-size: 1.25rem;
-    font-family: var(--font-body-family);
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 
-  .countdown-timer {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    font-family: var(--font-heading-family);
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: 0.05rem;
+  .urgency-banner__cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    background: #fef2f2;
   }
 
-  .countdown-value {
-    min-width: 28px;
-    text-align: center;
+  .urgency-banner--warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
   }
 
-  .urgency-banner__button {
-    padding: 8px 20px;
-    font-size: 0.875rem;
-    white-space: nowrap;
+  .urgency-banner--warning .urgency-banner__cta {
+    color: #d97706;
   }
 
-  .urgency-banner__close {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
-    opacity: 0.7;
-    transition: opacity 0.2s ease;
-    color: inherit;
+  .urgency-banner--success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   }
 
-  .urgency-banner__close:hover {
-    opacity: 1;
+  .urgency-banner--success .urgency-banner__cta {
+    color: #059669;
   }
 
   @media screen and (max-width: 749px) {
-    .urgency-banner {
-      padding: 10px 0;
-    }
-
-    .urgency-banner__content {
-      gap: 10px;
-    }
-
-    .urgency-banner__icon {
-      font-size: 1.5rem;
+    .urgency-banner__title {
+      font-size: 1.2rem;
     }
 
     .urgency-banner__text {
-      font-size: 1rem;
-      text-align: center;
+      font-size: 0.9rem;
     }
 
-    .urgency-banner__countdown {
-      font-size: 1.125rem;
-    }
-
-    .countdown-timer {
-      font-size: 1.375rem;
-    }
-
-    .urgency-banner__close {
-      position: relative;
-      transform: none;
-      margin-left: auto;
+    .urgency-banner__cta {
+      padding: 0.75rem 2rem;
+      font-size: 0.95rem;
     }
   }
 </style>
 
-<script>
-(function() {
-  const banner = document.getElementById('urgency-banner-{{ section.id }}');
-  if (!banner) return;
-
-  // Check if banner was dismissed
-  const dismissed = sessionStorage.getItem('urgencyBannerDismissed-{{ section.id }}');
-  if (dismissed && {{ section.settings.dismissible | json }}) {
-    banner.style.display = 'none';
-    return;
-  }
-
-  const countdown = banner.querySelector('[data-countdown-type]');
-  if (!countdown) return;
-
-  const countdownType = countdown.getAttribute('data-countdown-type');
-
-  function updateCountdown() {
-    const now = new Date();
-    let targetTime = new Date();
-
-    switch (countdownType) {
-      case 'end_of_day':
-        targetTime.setHours(23, 59, 59, 999);
-        break;
-      case 'end_of_week':
-        const daysUntilSunday = 7 - now.getDay();
-        targetTime.setDate(now.getDate() + daysUntilSunday);
-        targetTime.setHours(23, 59, 59, 999);
-        break;
-      case '24_hours':
-        targetTime = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-        break;
-      default:
-        targetTime.setHours(23, 59, 59, 999);
-    }
-
-    const diff = targetTime - now;
+<div class="urgency-banner urgency-banner--{{ section.settings.style }}">
+  <div class="urgency-banner__content">
+    {% if section.settings.show_icon %}
+      <div class="urgency-banner__icon">{{ section.settings.icon }}</div>
+    {% endif %}
     
-    if (diff <= 0) {
-      targetTime = new Date();
-      targetTime.setHours(23, 59, 59, 999);
-    }
-
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-    const hoursEl = countdown.querySelector('[data-hours]');
-    const minutesEl = countdown.querySelector('[data-minutes]');
-    const secondsEl = countdown.querySelector('[data-seconds]');
-
-    if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
-    if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
-    if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
-  }
-
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
-})();
-</script>
-{%- endif -%}
+    {% if section.settings.title != blank %}
+      <h2 class="urgency-banner__title">{{ section.settings.title }}</h2>
+    {% endif %}
+    
+    {% if section.settings.text != blank %}
+      <p class="urgency-banner__text">{{ section.settings.text }}</p>
+    {% endif %}
+    
+    {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+      <a href="{{ section.settings.button_link }}" class="urgency-banner__cta">
+        {{ section.settings.button_text }}
+      </a>
+    {% endif %}
+  </div>
+</div>
 
 {% schema %}
 {
   "name": "Urgency Banner",
   "tag": "section",
-  "class": "section-urgency-banner",
+  "class": "section",
   "settings": [
     {
-      "type": "checkbox",
-      "id": "enable_banner",
-      "default": true,
-      "label": "Enable urgency banner"
-    },
-    {
       "type": "select",
-      "id": "color_scheme",
+      "id": "style",
+      "label": "Banner Style",
       "options": [
         {
-          "value": "accent-1",
-          "label": "Accent 1"
+          "value": "urgent",
+          "label": "Urgent (Red)"
         },
         {
-          "value": "accent-2",
-          "label": "Accent 2"
+          "value": "warning",
+          "label": "Warning (Orange)"
         },
         {
-          "value": "background-1",
-          "label": "Background 1"
-        },
-        {
-          "value": "background-2",
-          "label": "Background 2"
-        },
-        {
-          "value": "inverse",
-          "label": "Inverse"
+          "value": "success",
+          "label": "Success (Green)"
         }
       ],
-      "default": "accent-1",
-      "label": "Color scheme"
-    },
-    {
-      "type": "checkbox",
-      "id": "sticky",
-      "default": true,
-      "label": "Make banner sticky",
-      "info": "Banner will stay at top of page when scrolling"
-    },
-    {
-      "type": "checkbox",
-      "id": "dismissible",
-      "default": true,
-      "label": "Allow users to dismiss"
-    },
-    {
-      "type": "header",
-      "content": "Content"
+      "default": "urgent"
     },
     {
       "type": "checkbox",
       "id": "show_icon",
-      "default": true,
-      "label": "Show icon"
+      "label": "Show Icon",
+      "default": true
     },
     {
       "type": "text",
       "id": "icon",
-      "default": "🔥",
-      "label": "Icon",
-      "info": "Use emoji"
+      "label": "Icon (emoji)",
+      "default": "🔥"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Limited Stock Alert"
     },
     {
       "type": "textarea",
-      "id": "message",
-      "default": "Limited Time: Extra 15% OFF Everything!",
-      "label": "Message"
-    },
-    {
-      "type": "header",
-      "content": "Countdown Timer"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_countdown",
-      "default": true,
-      "label": "Show countdown timer"
-    },
-    {
-      "type": "select",
-      "id": "countdown_type",
-      "options": [
-        {
-          "value": "end_of_day",
-          "label": "End of day (resets daily)"
-        },
-        {
-          "value": "end_of_week",
-          "label": "End of week (resets Sunday)"
-        },
-        {
-          "value": "24_hours",
-          "label": "24 hours from now"
-        }
-      ],
-      "default": "end_of_day",
-      "label": "Countdown type"
-    },
-    {
-      "type": "header",
-      "content": "Button"
+      "id": "text",
+      "label": "Text",
+      "default": "Popular colors selling fast. Order now to secure your jacket."
     },
     {
       "type": "text",
       "id": "button_text",
-      "default": "Shop Now",
-      "label": "Button text"
+      "label": "Button Text",
+      "default": "Shop Now"
     },
     {
       "type": "url",
       "id": "button_link",
-      "label": "Button link"
+      "label": "Button Link"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 24
     }
   ],
   "presets": [
     {
-      "name": "Urgency Banner"
+      "name": "Urgency Banner",
+      "settings": {
+        "style": "urgent",
+        "show_icon": true,
+        "icon": "🔥",
+        "title": "Limited Stock Alert",
+        "text": "Popular colors selling fast. Order now to secure your preferred color.",
+        "button_text": "Shop Now - $149.99",
+        "button_link": "/collections/all"
+      }
     }
   ]
 }
