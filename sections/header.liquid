@@ -65,6 +65,8 @@
     text-decoration: none;
     padding-bottom: 1rem;
     padding-top: 1rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
     line-height: calc(1 + 0.8 / var(--font-body-scale));
   }
 
@@ -72,6 +74,8 @@
     .list-menu__item--link {
       padding-bottom: 0.5rem;
       padding-top: 0.5rem;
+      padding-left: 0.65rem;
+      padding-right: 0.65rem;
     }
   }
 </style>
@@ -79,6 +83,11 @@
 {%- style -%}
   .header {
     padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 3rem {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px 3rem;
+  }
+
+  .header__icons .icon {
+    width: 1.8rem;
+    height: 1.8rem;
   }
 
   .section-header {

@@ -1,0 +1,38 @@
+/* ArcPlug Homepage Optimizations */
+
+/* Tighter grid spacing for product cards */
+.grid {
+  column-gap: var(--grid-desktop-horizontal-spacing);
+  row-gap: calc(var(--grid-desktop-vertical-spacing) * 0.85);
+}
+
+@media screen and (max-width: 989px) {
+  .grid {
+    column-gap: var(--grid-mobile-horizontal-spacing);
+    row-gap: calc(var(--grid-mobile-vertical-spacing) * 0.9);
+  }
+}
+
+/* Consistent heading sizes across sections */
+.section h2,
+.section .h2 {
+  line-height: 1.2;
+}
+
+/* Product card title sizing */
+.card__heading {
+  font-size: 1.05rem;
+  line-height: 1.35;
+  font-weight: 500;
+}
+
+@media screen and (min-width: 750px) {
+  .card__heading {
+    font-size: 1.1rem;
+  }
+}
+
+/* Better rhythm for sections */
+.shopify-section + .shopify-section {
+  margin-top: 0;
+}

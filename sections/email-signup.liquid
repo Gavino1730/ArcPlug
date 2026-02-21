@@ -1,40 +1,42 @@
 <style>
   .email-signup {
-    padding: 50px 2rem 40px 2rem;
+    padding: 32px 2rem 28px 2rem;
     text-align: center;
   }
 
   .email-signup__wrapper {
-    max-width: 600px;
+    max-width: 700px;
     margin: 0 auto;
   }
 
   .email-signup__heading {
-    font-size: 2rem;
+    font-size: 1.75rem;
     font-weight: 600;
-    margin: 0 0 1rem 0;
+    margin: 0 0 0.875rem 0;
     color: rgba(var(--color-foreground), 0.9);
     border-bottom: 1px solid rgba(var(--color-foreground), 0.15);
-    padding-bottom: 20px;
+    padding-bottom: 16px;
   }
 
   .email-signup__description {
     font-size: 1rem;
     color: rgba(var(--color-foreground), 0.7);
-    margin: 0 0 2rem 0;
+    margin: 0 0 1.5rem 0;
   }
 
   .email-signup__form {
     display: flex;
     gap: 0.5rem;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
+    align-items: stretch;
   }
 
   .email-signup__input {
     flex: 1;
-    min-width: 250px;
-    padding: 0.875rem 1rem;
+    min-width: 300px;
+    max-width: 400px;
+    padding: 1rem 1.25rem;
     border: 1px solid rgba(var(--color-foreground), 0.2);
     border-radius: var(--inputs-radius, 0);
     font-size: 1rem;
@@ -47,7 +49,7 @@
   }
 
   .email-signup__button {
-    padding: 0.875rem 2rem;
+    padding: 1rem 2.5rem;
     background-color: rgb(var(--color-button));
     color: rgb(var(--color-button-text));
     border: none;

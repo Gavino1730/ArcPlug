@@ -2153,7 +2153,7 @@ input[type='checkbox'] {
 }
 
 .utility-bar .list-social__item .icon {
-  scale: 0.9;
+  scale: 0.82;
 }
 
 @media screen and (min-width: 990px) {
@@ -2184,6 +2184,7 @@ input[type='checkbox'] {
   flex-wrap: wrap;
   align-content: center;
   grid-area: announcements;
+  padding: 0.5rem 0;
 }
 
 .announcement-bar .slider--everywhere {
